@@ -1,6 +1,5 @@
-syn keyword CTagsImport randint permutations unittest nx mutate
-syn keyword CTagsMember __init__ test_mutate
-syn keyword CTagsGlobalVariable liste_chemins Map
-syn keyword CTagsFunction init_map detail_path store_path_with_weight gen_perms mutate process_fitness createMap potentially_mutate get_path_weight get_weight __init__
-syn keyword CTagsClass PathMethodsUnitTest Path Population
+syn keyword CTagsMember test_mutate __init__
+syn keyword CTagsGlobalVariable Map liste_chemins
+syn keyword CTagsFunction get_weight get_path_weight __init__ gen_perms detail_path init_map process_fitness mutate createMap store_path_with_weight potentially_mutate
+syn keyword CTagsClass Population Path PathMethodsUnitTest
 

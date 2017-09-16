@@ -3,7 +3,7 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.8	//
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 Map	Map.py	/^Map = nx.Graph();$/;"	v
 PathMethodsUnitTest	unit_tests.py	/^class PathMethodsUnitTest(unittest.TestCase):$/;"	c
 Path	Path.py	/^class Path:$/;"	c
@@ -19,13 +19,7 @@ init_map	utils.py	/^def init_map():$/;"	f
 liste_chemins	Population.py	/^liste_chemins = []$/;"	v
 mutate	Path.py	/^def mutate():$/;"	f
 mutate	creation_chemins.py	/^def mutate(chemin):$/;"	f
-mutate	unit_tests.py	/^from creation_chemins import mutate$/;"	i
-nx	Map.py	/^import networkx as nx$/;"	i
-permutations	Map.py	/^from itertools import permutations$/;"	i
-permutations	creation_chemins.py	/^from itertools import permutations$/;"	i
 potentially_mutate	creation_chemins.py	/^def potentially_mutate(prob, chemin):$/;"	f
 process_fitness	Path.py	/^def process_fitness(self):$/;"	f
-randint	creation_chemins.py	/^from random import randint$/;"	i
 store_path_with_weight	creation_chemins.py	/^def store_path_with_weight:$/;"	f
 test_mutate	unit_tests.py	/^    def test_mutate(self):$/;"	m	class:PathMethodsUnitTest
-unittest	unit_tests.py	/^import unittest$/;"	i
