@@ -1,0 +1,31 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Map	Map.py	/^Map = nx.Graph();$/;"	v
+PathMethodsUnitTest	unit_tests.py	/^class PathMethodsUnitTest(unittest.TestCase):$/;"	c
+Path	Path.py	/^class Path:$/;"	c
+Population	Population.py	/^class Population:$/;"	c
+__init__	Path.py	/^def __init__(self, nb_villes, liste_villes):$/;"	f
+__init__	Population.py	/^    def __init__(self, nb_chemins):$/;"	m	class:Population
+createMap	Map.py	/^def createMap():$/;"	f
+detail_path	utils.py	/^def detail_path(string_path):$/;"	f
+gen_perms	creation_chemins.py	/^def gen_perms(nb_chemins, nb_villes):$/;"	f
+get_path_weight	Map.py	/^def get_path_weight(path):$/;"	f
+get_weight	utils.py	/^def get_weight(string_path):$/;"	f
+init_map	utils.py	/^def init_map():$/;"	f
+liste_chemins	Population.py	/^liste_chemins = []$/;"	v
+mutate	Path.py	/^def mutate():$/;"	f
+mutate	creation_chemins.py	/^def mutate(chemin):$/;"	f
+mutate	unit_tests.py	/^from creation_chemins import mutate$/;"	i
+nx	Map.py	/^import networkx as nx$/;"	i
+permutations	Map.py	/^from itertools import permutations$/;"	i
+permutations	creation_chemins.py	/^from itertools import permutations$/;"	i
+potentially_mutate	creation_chemins.py	/^def potentially_mutate(prob, chemin):$/;"	f
+process_fitness	Path.py	/^def process_fitness(self):$/;"	f
+randint	creation_chemins.py	/^from random import randint$/;"	i
+store_path_with_weight	creation_chemins.py	/^def store_path_with_weight:$/;"	f
+test_mutate	unit_tests.py	/^    def test_mutate(self):$/;"	m	class:PathMethodsUnitTest
+unittest	unit_tests.py	/^import unittest$/;"	i
