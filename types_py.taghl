@@ -1,5 +1,5 @@
 syn keyword CTagsMember test_mutate __init__
-syn keyword CTagsGlobalVariable Map liste_chemins
-syn keyword CTagsFunction get_weight get_path_weight __init__ gen_perms detail_path init_map process_fitness mutate createMap store_path_with_weight potentially_mutate
-syn keyword CTagsClass Population Path PathMethodsUnitTest
+syn keyword CTagsGlobalVariable arr A Map G2 G liste_chemins
+syn keyword CTagsFunction potentially_mutate __init__ detail_path get_weight init_pop process_fitness mutate gen_perms init_map get_path_weight store_path_with_weight createMap
+syn keyword CTagsClass Population PathMethodsUnitTest Path
 

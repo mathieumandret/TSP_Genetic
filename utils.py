@@ -1,3 +1,5 @@
+import numpy.random
+
 def detail_path(string_path):
     """
     Prends en paramètre une chaine de caractère du type
@@ -26,8 +28,6 @@ def get_weight(string_path):
     Retourne le poids d'un chemin donne
     par un string de la forme '1234'
     """
-    if (len(string_path) > len(init_map()[0])):
-        raise ValueError('Le chemin demande comporte plus de ville que la carte')
     somme = 0
     #Pour paire de sommets, on doit ajouter a la somme
     #la valeur de matrix[sommet1-1][sommet2-1]
@@ -45,4 +45,3 @@ def get_weight(string_path):
 #Cette fonction devrai retourner
 # 1->2 2->3
 # 1 + 4 = 5
-print(get_weight('123'))
