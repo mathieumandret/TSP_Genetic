@@ -1,4 +1,7 @@
+#coding: utf-8
+
 import utils
+import math
 import numpy.random
 
 """
@@ -21,14 +24,14 @@ carte = [
         ]
 #Nombre de villes dans la carte
 NBVILLES = len(carte[0])
-
-"""
-GENERATION DE LA POPULATION INITALE DE 20 INDIVIDUS
-"""
-
-#Avec un set, on a pas forcement 20 elements
-
 EFFECTIF_INITIAL = 20
+MEILLEURSCORE = math.inf
+MEILLEURCHEMIN = None
+
+"""
+GENERATION DE LA POPULATION INITALE DE EFFECTIF_INITIAL INDIVIDUS
+"""
+
 population = set()
 i = 0
 while(len(population) < EFFECTIF_INITIAL):
@@ -52,6 +55,19 @@ def valabilite(chemin):
     return somme
 
 """
+SELECTION DU MEILLEUR INDIVIDU
+"""
+
+def meilleurChemin():
+    global MEILLEURSCORE
+    for chemin in population:
+        if valabilite(chemin) < MEILLEURSCORE:
+            MEILLEURSCORE = valabilite(chemin)
+            MEILLEURCHEMIN = chemin
+            
+    
+
+"""
 SELECTION DE 2 INDIVIDU ALEATOIREMENT
 """
 
@@ -63,5 +79,4 @@ CROISEMENT DES 2 INDIVIDUS
 """
 
 #TODO Implémenter le crossover
-
 

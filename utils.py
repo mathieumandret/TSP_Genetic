@@ -1,3 +1,5 @@
+#coding: utf-8
+
 import numpy.random
 
 def detail_path(string_path):
@@ -49,17 +51,13 @@ def crossover(p1, p2):
     """
     #Selection des points de decoupe
     #Decoupe du deuxieme element au 3eme
-    print(p1, "\n", p2, "\n\n")
     point_initial = 1
     point_final = 3
     child = p1
     child[point_initial:point_final] = p2[point_initial:point_final]
-    print(child)
     #Elimination des elements dupliques
     s_child = set(child)
-    print(s_child)
 
-crossover([1,2,3,4],[5,6,7,8])
 
 
 
