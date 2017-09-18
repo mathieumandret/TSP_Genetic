@@ -26,15 +26,17 @@ NBVILLES = len(carte[0])
 GENERATION DE LA POPULATION INITALE DE 20 INDIVIDUS
 """
 
-#TODO Garantir l'unicite de chaque individu (set)
+#Avec un set, on a pas forcement 20 elements
 
 EFFECTIF_INITIAL = 20
-population = []
+population = set()
 for i in range(EFFECTIF_INITIAL):
     modele = numpy.arange(NBVILLES)
     numpy.random.shuffle(modele)
-    population.append(modele)
+    #Cast en tuple pour permettre le add
+    population.add(tuple(modele))
 
+print(len(population))
 
 """
 CALCUL DE LA VALABILITE DE CHAQUE INDIVIDU
@@ -50,13 +52,15 @@ def valabilite(chemin):
             somme += carte[path[i]][path[i] - 1]
     return somme
 
-
 """
 SELECTION DE 2 INDIVIDU ALEATOIREMENT
 """
 
-pere = population[numpy.random.randint(len(population))]
-mere = population[numpy.random.randint(len(population))]
+pere = list(population)[numpy.random.randint(len(population))]
+mere = list(population)[numpy.random.randint(len(population))]
+
+print(pere)
+print(mere)
 
 """
 CROISEMENT DES 2 INDIVIDUS

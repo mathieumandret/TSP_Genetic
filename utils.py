@@ -42,6 +42,20 @@ def get_weight(string_path):
     return somme
 
 
-#Cette fonction devrai retourner
-# 1->2 2->3
-# 1 + 4 = 5
+def crossover(p1, p2):
+    """
+    Cree une nouvelle liste a partir de
+    2 listes parentes
+    """
+    #Selection des points de decoupe
+    #Decoupe du deuxieme element au 3eme
+    print(p1, "\n", p2, "\n\n")
+    point_initial = 1
+    point_final = 3
+    child = p1
+    child[point_initial:point_final] = p2[point_initial:point_final]
+    print(child)
+    #Elimination des elements dupliques
+    s_child = set(child)
+    print(s_child)
+
