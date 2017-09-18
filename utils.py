@@ -59,3 +59,7 @@ def crossover(p1, p2):
     s_child = set(child)
     print(s_child)
 
+crossover([1,2,3,4],[5,6,7,8])
+
+
+

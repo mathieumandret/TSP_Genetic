@@ -30,13 +30,13 @@ GENERATION DE LA POPULATION INITALE DE 20 INDIVIDUS
 
 EFFECTIF_INITIAL = 20
 population = set()
-for i in range(EFFECTIF_INITIAL):
+i = 0
+while(len(population) < EFFECTIF_INITIAL):
     modele = numpy.arange(NBVILLES)
     numpy.random.shuffle(modele)
     #Cast en tuple pour permettre le add
     population.add(tuple(modele))
-
-print(len(population))
+    i += 1
 
 """
 CALCUL DE LA VALABILITE DE CHAQUE INDIVIDU
@@ -44,7 +44,6 @@ CALCUL DE LA VALABILITE DE CHAQUE INDIVIDU
 
 def valabilite(chemin):
     somme = 0
-    weight = 0
     paths = (utils.detail_path(chemin))
     #Parcours des couples de sommets
     for path in paths:
@@ -58,9 +57,6 @@ SELECTION DE 2 INDIVIDU ALEATOIREMENT
 
 pere = list(population)[numpy.random.randint(len(population))]
 mere = list(population)[numpy.random.randint(len(population))]
-
-print(pere)
-print(mere)
 
 """
 CROISEMENT DES 2 INDIVIDUS
