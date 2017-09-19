@@ -1,5 +1,5 @@
-syn keyword CTagsMember test_mutate __init__
-syn keyword CTagsGlobalVariable arr A Map G2 G liste_chemins
-syn keyword CTagsFunction potentially_mutate __init__ detail_path get_weight init_pop process_fitness mutate gen_perms init_map get_path_weight store_path_with_weight createMap
-syn keyword CTagsClass Population PathMethodsUnitTest Path
+syn keyword CTagsMember test_mutate
+syn keyword CTagsGlobalVariable arr EFFECTIF_INITIAL modele MEILLEURCHEMIN echangesB carte echangesA b a mere population A partex NBVILLES partint droite dup i G2 gauche MEILLEURSCORE G pere
+syn keyword CTagsFunction get_weight mutate meilleurChemin store_path_with_weight gen_perms detail_path estLegal potentially_mutate init_map valabilite crossover
+syn keyword CTagsClass PathMethodsUnitTest
 

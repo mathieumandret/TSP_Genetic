@@ -5,26 +5,38 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 A	draw_graph.py	/^A = networkx.adjacency_matrix(G)$/;"	v
+EFFECTIF_INITIAL	TSP_v1.py	/^EFFECTIF_INITIAL = 20$/;"	v
 G2	draw_graph.py	/^G2 =  networkx.Graph([(1,1)])$/;"	v
 G	draw_graph.py	/^G = networkx.from_numpy_matrix(arr)$/;"	v
-Map	Map.py	/^Map = nx.Graph();$/;"	v
+MEILLEURCHEMIN	TSP_v1.py	/^MEILLEURCHEMIN = None$/;"	v
+MEILLEURSCORE	TSP_v1.py	/^MEILLEURSCORE = math.inf$/;"	v
+NBVILLES	TSP_v1.py	/^NBVILLES = len(carte[0])$/;"	v
 PathMethodsUnitTest	unit_tests.py	/^class PathMethodsUnitTest(unittest.TestCase):$/;"	c
-Path	Path.py	/^class Path:$/;"	c
-Population	Population.py	/^class Population:$/;"	c
-__init__	Path.py	/^def __init__(self, nb_villes, liste_villes):$/;"	f
-__init__	Population.py	/^    def __init__(self, nb_chemins):$/;"	m	class:Population
 arr	draw_graph.py	/^arr = array([[0,1,2,6],$/;"	v
-createMap	Map.py	/^def createMap():$/;"	f
+a	crossover.py	/^a = [1, 2, 3, 4]$/;"	v
+b	crossover.py	/^b = [4, 1, 2, 3]$/;"	v
+carte	TSP_v1.py	/^carte = [$/;"	v
+crossover	utils.py	/^def crossover(p1, p2):$/;"	f
 detail_path	utils.py	/^def detail_path(string_path):$/;"	f
+droite	crossover.py	/^droite = 3$/;"	v
+dup	crossover.py	/^dup = []$/;"	v
+echangesA	crossover.py	/^echangesA = {}$/;"	v
+echangesB	crossover.py	/^echangesB = {}$/;"	v
+estLegal	crossover.py	/^def estLegal(chemin):$/;"	f
+gauche	crossover.py	/^gauche = 1$/;"	v
 gen_perms	creation_chemins.py	/^def gen_perms(nb_chemins, nb_villes):$/;"	f
-get_path_weight	Map.py	/^def get_path_weight(path):$/;"	f
 get_weight	utils.py	/^def get_weight(string_path):$/;"	f
 init_map	utils.py	/^def init_map():$/;"	f
-init_pop	utils.py	/^def init_pop():$/;"	f
-liste_chemins	Population.py	/^liste_chemins = []$/;"	v
-mutate	Path.py	/^def mutate():$/;"	f
+i	TSP_v1.py	/^i = 0$/;"	v
+meilleurChemin	TSP_v1.py	/^def meilleurChemin():$/;"	f
+mere	TSP_v1.py	/^mere = list(population)[numpy.random.randint(len(population))]$/;"	v
+modele	TSP_v1.py	/^    modele = numpy.arange(NBVILLES)$/;"	v
 mutate	creation_chemins.py	/^def mutate(chemin):$/;"	f
+partex	crossover.py	/^partex = a[::(droite - gauche) + 1]  # = a[:gauche]+a[droite:]$/;"	v
+partint	crossover.py	/^partint = a[gauche:droite]$/;"	v
+pere	TSP_v1.py	/^pere = list(population)[numpy.random.randint(len(population))]$/;"	v
+population	TSP_v1.py	/^population = set()$/;"	v
 potentially_mutate	creation_chemins.py	/^def potentially_mutate(prob, chemin):$/;"	f
-process_fitness	Path.py	/^def process_fitness(self):$/;"	f
 store_path_with_weight	creation_chemins.py	/^def store_path_with_weight:$/;"	f
 test_mutate	unit_tests.py	/^    def test_mutate(self):$/;"	m	class:PathMethodsUnitTest
+valabilite	TSP_v1.py	/^def valabilite(chemin):$/;"	f
