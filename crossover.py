@@ -2,12 +2,20 @@
 
 import random
 
-a = [2, 2, 3, 4]
+a = [1, 2, 3, 4]
 b = [4, 1, 2, 3]
 
 #TMX 2 points
-gauche = 1
-droite = 3
+#Si on garde l'intervale [0, len(a)], on peut avoir un
+#point de découpe gauche a len(a), le tableau ne serait
+#alors pas découpé
+gauche = random.randint(0,len(a)-1)
+droite = random.randint(0,len(a))
+
+#Si l'interval n'est pas valable, recalculer la partie droite
+while droite <= gauche:
+    droite = random.randint(0,len(a))
+print("gauche: ",gauche, "droite: ", droite)
 
 #Swap
 a[gauche:droite], b[gauche:droite] = b[gauche:droite], a[gauche:droite]
@@ -29,13 +37,14 @@ def estLegal(chemin):
     des elements dupliques
     """
     return [
-            el for el in chemin[gauche:droite]
-            if el in (chemin[:gauche] + chemin[droite:])
-            ] == []
-
+        el for el in chemin[gauche:droite]
+        if el in (chemin[:gauche] + chemin[droite:])
+    ] == []
 
     #Partie exterieure de la decoupe
-partex = a[::(droite - gauche) + 1]  # = a[:gauche]+a[droite:]
+
+
+partex = a[:gauche]+a[droite:] 
 #Partie interieur de la decoupe
 partint = a[gauche:droite]
 dup = []
@@ -47,6 +56,7 @@ for i in range(len(partex)):
 
 #Detection et reparation des elements dupliques
 
+#TODO utiliser un while
 for i in range(10):
     for i in range(len(partex)):
         #Si un element de la partie ext appartient aussi à  la partie interieure
@@ -56,11 +66,12 @@ for i in range(10):
             #On remplace l'element duplique par sa correspondance dans le dictionnaire des echanges
             partex[i] = remp
 
-#TODO Refusionner les parties interieures et exterieures du tableau
-
 #On doit retrouver 3,1,2,4
 
 res = []
+
+print(partint)
+print(partex)
 
 indiceInte = 0
 indiceExte = 0
@@ -76,3 +87,4 @@ for i in range(len(a)):
         indiceExte += 1
 
 print(res)
+print(estLegal(res))
