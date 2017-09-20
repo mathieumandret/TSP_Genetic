@@ -2,7 +2,7 @@
 
 import random
 
-a = [1, 2, 3, 4]
+a = [2, 2, 3, 4]
 b = [4, 1, 2, 3]
 
 #TMX 2 points
@@ -29,16 +29,15 @@ def estLegal(chemin):
     des elements dupliques
     """
     return [
-        el for el in chemin[gauche:droite]
-        if el in (chemin[:gauche] + chemin[droite:])
-    ] == []
+            el for el in chemin[gauche:droite]
+            if el in (chemin[:gauche] + chemin[droite:])
+            ] == []
 
 
-#Partie exterieure de la decoupe
+    #Partie exterieure de la decoupe
 partex = a[::(droite - gauche) + 1]  # = a[:gauche]+a[droite:]
 #Partie interieur de la decoupe
 partint = a[gauche:droite]
-
 dup = []
 
 #Detection de l'indice des elements duplique
@@ -58,3 +57,22 @@ for i in range(10):
             partex[i] = remp
 
 #TODO Refusionner les parties interieures et exterieures du tableau
+
+#On doit retrouver 3,1,2,4
+
+res = []
+
+indiceInte = 0
+indiceExte = 0
+for i in range(len(a)):
+    if i < gauche:
+        res.append(partex[indiceExte])
+        indiceExte += 1
+    elif i < droite:
+        res.append(partint[indiceInte])
+        indiceInte += 1
+    else:
+        res.append(partex[indiceExte])
+        indiceExte += 1
+
+print(res)
