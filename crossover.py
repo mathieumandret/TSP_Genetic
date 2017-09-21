@@ -15,7 +15,6 @@ droite = random.randint(0,len(a))
 #Si l'interval n'est pas valable, recalculer la partie droite
 while droite <= gauche:
     droite = random.randint(0,len(a))
-print("gauche: ",gauche, "droite: ", droite)
 
 #Swap
 a[gauche:droite], b[gauche:droite] = b[gauche:droite], a[gauche:droite]
@@ -47,12 +46,16 @@ def estLegal(chemin):
 partex = a[:gauche]+a[droite:] 
 #Partie interieur de la decoupe
 partint = a[gauche:droite]
-dup = []
 
-#Detection de l'indice des elements duplique
-for i in range(len(partex)):
-    if partex[i] in partint:
-        dup.append(partex[i])
+def detecter_dup(partie_interieure, partie_exterieure):
+    dup = []
+    for i in range(len(partie_exterieure)):
+        if partie_exterieure[i] in partie_interieure:
+            dup.append(partie_exterieure[i])
+    return dup
+
+dup = detecter_dup(partint, partex)
+
 
 #Detection et reparation des elements dupliques
 
@@ -66,25 +69,26 @@ for i in range(10):
             #On remplace l'element duplique par sa correspondance dans le dictionnaire des echanges
             partex[i] = remp
 
-#On doit retrouver 3,1,2,4
+def recoller(partie_interieure, partie_exterieure):
+    """
+    Prends en paramètres la partie interieure
+    et exterieure d'un tableau et le reconstitue
+    selon les points de decoupe
+    """
+    res = []
+    indiceInte = 0
+    indiceExte = 0
+    for i in range(len(partie_exterieure)+len(partie_interieure)):
+        if i < gauche:
+            res.append(partie_exterieure[indiceExte])
+            indiceExte += 1
+        elif i < droite:
+            res.append(partie_interieure[indiceInte])
+            indiceInte += 1
+        else:
+            res.append(partie_exterieure[indiceExte])
+            indiceExte += 1
+    return res
 
-res = []
-
-print(partint)
-print(partex)
-
-indiceInte = 0
-indiceExte = 0
-for i in range(len(a)):
-    if i < gauche:
-        res.append(partex[indiceExte])
-        indiceExte += 1
-    elif i < droite:
-        res.append(partint[indiceInte])
-        indiceInte += 1
-    else:
-        res.append(partex[indiceExte])
-        indiceExte += 1
-
-print(res)
+res = recoller(partint, partex)
 print(estLegal(res))
