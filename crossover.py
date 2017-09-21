@@ -16,8 +16,17 @@ droite = random.randint(0,len(a))
 while droite <= gauche:
     droite = random.randint(0,len(a))
 
+def swap(chemin1, chemin2):
+    """
+    Echange une partie d'un
+    chemin avec celle d'un autre
+    selon 2 points de decoupe
+    """
+    chemin1[gauche:droite], chemin2[gauche:droite] = chemin2[gauche:droite], chemin1[gauche:droite]
+
+
 #Swap
-a[gauche:droite], b[gauche:droite] = b[gauche:droite], a[gauche:droite]
+swap(a,b)
 
 #Echange effectues
 echangesB = {}
@@ -35,39 +44,23 @@ def estLegal(chemin):
     Verifie si un chemin contient ou non
     des elements dupliques
     """
-    return [
-        el for el in chemin[gauche:droite]
-        if el in (chemin[:gauche] + chemin[droite:])
-    ] == []
+    return len(chemin) == len(set(chemin))
 
+
+def decouper(chemin):
+    """
+    Pour un chemin complet retourne 
+    la partie interieure et exterieure
+    aux points de découpe
+    """
     #Partie exterieure de la decoupe
+    partex = chemin[:gauche]+chemin[droite:] 
+    #Partie interieur de la decoupe
+    partint = chemin[gauche:droite]
+    return partint, partex
 
-
-partex = a[:gauche]+a[droite:] 
-#Partie interieur de la decoupe
-partint = a[gauche:droite]
-
-def detecter_dup(partie_interieure, partie_exterieure):
-    dup = []
-    for i in range(len(partie_exterieure)):
-        if partie_exterieure[i] in partie_interieure:
-            dup.append(partie_exterieure[i])
-    return dup
-
-dup = detecter_dup(partint, partex)
-
-
-#Detection et reparation des elements dupliques
-
-#TODO utiliser un while
-for i in range(10):
-    for i in range(len(partex)):
-        #Si un element de la partie ext appartient aussi à  la partie interieure
-        if partex[i] in partint:
-            #On prends l'element correspondant dans le dictionnaire des échanges
-            remp = echangesB[partex[i]]
-            #On remplace l'element duplique par sa correspondance dans le dictionnaire des echanges
-            partex[i] = remp
+partintA, partexA = decouper(a)
+partintB, partexB = decouper(b)
 
 def recoller(partie_interieure, partie_exterieure):
     """
@@ -90,5 +83,20 @@ def recoller(partie_interieure, partie_exterieure):
             indiceExte += 1
     return res
 
-res = recoller(partint, partex)
-print(estLegal(res))
+
+#Detection et reparation des elements dupliques
+def reparer(partint, partex, echanges):
+    while (estLegal(recoller(partint,partex))) == False:
+        for i in range(len(partex)):
+            #Si un element de la partie ext appartient aussi à  la partie interieure
+            if partex[i] in partint:
+                #On prends l'element correspondant dans le dictionnaire des échanges
+                remp = echanges[partex[i]]
+                #On remplace l'element duplique par sa correspondance dans le dictionnaire des echanges
+                partex[i] = remp
+
+reparer(partintA, partexA, echangesB)
+reparer(partintB, partexB, echangesA)
+
+print(recoller(partintA, partexA))
+print(recoller(partintB, partexB))
