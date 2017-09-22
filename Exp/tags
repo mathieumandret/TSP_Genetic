@@ -1,0 +1,23 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Chemin	chemin.py	/^class Chemin:$/;"	c
+Chemin	client.py	/^from chemin import Chemin$/;"	i
+City	city.py	/^class City:$/;"	c
+City	client.py	/^from city import City$/;"	i
+__init__	chemin.py	/^    def __init__(self, liste_villes):$/;"	m	class:Chemin
+__init__	city.py	/^    def __init__(self, x, y):$/;"	m	class:City
+__repr__	chemin.py	/^    def __repr__(self):$/;"	m	class:Chemin	file:
+__repr__	city.py	/^    def __repr__(self):$/;"	m	class:City	file:
+c	client.py	/^c = City(1,2)$/;"	v
+distanceTo	city.py	/^    def distanceTo(self,c):$/;"	m	class:City
+d	client.py	/^d = City(3,4)$/;"	v
+e	client.py	/^e = City(5,6)$/;"	v
+fitness	chemin.py	/^    def fitness(self):$/;"	m	class:Chemin
+mutate	chemin.py	/^    def mutate(self):$/;"	m	class:Chemin
+pow	city.py	/^from math import sqrt, pow$/;"	i
+randint	chemin.py	/^from random import randint$/;"	i
+sqrt	city.py	/^from math import sqrt, pow$/;"	i

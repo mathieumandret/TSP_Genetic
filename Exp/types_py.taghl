@@ -1,0 +1,5 @@
+syn keyword CTagsImport Chemin City sqrt randint pow
+syn keyword CTagsMember distanceTo __init__ __repr__ fitness mutate
+syn keyword CTagsGlobalVariable c d e
+syn keyword CTagsClass Chemin City
+
