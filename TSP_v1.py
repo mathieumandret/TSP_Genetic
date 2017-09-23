@@ -78,5 +78,5 @@ mere = list(population)[numpy.random.randint(len(population))]
 CROISEMENT DES 2 INDIVIDUS
 """
 
-#TODO Implémenter le crossover
+#TODO Integrer crossover.py
 
