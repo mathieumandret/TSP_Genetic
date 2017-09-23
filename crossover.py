@@ -1,19 +1,10 @@
 #coding: utf-8
 
 import random
+import copy
 
 a = [1, 2, 3, 4, 5, 6, 7, 8]
 b = [3, 7, 5, 1, 6, 8, 2, 4]
-
-
-def swap(chemin1, chemin2):
-    """
-    Echange une partie d'un
-    chemin avec celle d'un autre
-    selon 2 points de decoupe
-    """
-    chemin1[gauche:droite], chemin2[gauche:droite] = chemin2[
-        gauche:droite], chemin1[gauche:droite]
 
 
 def estLegal(chemin):
@@ -68,17 +59,19 @@ def recoller(partie_interieure, partie_exterieure, gauche, droite):
 #Detection et reparation des elements dupliques
 def reparer(partint, partex, echanges, gauche, droite):
     while (estLegal(recoller(partint, partex, gauche, droite))) == False:
-        print("Reparation...")
         for i in range(len(partex)):
             #Si un element de la partie ext appartient aussi à  la partie interieure
             if partex[i] in partint:
                 #On prends l'element correspondant dans le dictionnaire des échanges
                 remp = echanges[partex[i]]
-                #On remplace l'element duplique par sa correspondance dans le dictionnaire des echanges
+                #On remplace l'element d2uplique par sa correspondance dans le dictionnaire des echanges
                 partex[i] = remp
 
 
-def crossover(chemin1, chemin2):
+def crossover(c1, c2):
+    #Copie des chemins pour eviter les effets de bord
+    chemin1 = copy.copy(c1)
+    chemin2 = copy.copy(c2)
     #Selection aléatoire de 2 points de découpe
     gauche = random.randint(0, len(chemin1) - 1)
     droite = random.randint(0, len(chemin1))
@@ -86,7 +79,8 @@ def crossover(chemin1, chemin2):
     while droite <= gauche:
         droite = random.randint(0, len(chemin1))
     #Echange des chemin en fonction des points de decoupe
-    chemin1[gauche:droite], chemin2[gauche:droite] = chemin2[gauche:droite], chemin1[gauche:droite]
+    chemin1[gauche:droite], chemin2[gauche:droite] = chemin2[
+        gauche:droite], chemin1[gauche:droite]
     #Enregistrement des echanges effectues
     echangesB = {}
     echangesA = {}
@@ -105,7 +99,3 @@ def crossover(chemin1, chemin2):
     resB = recoller(partintB, partexB, gauche, droite)
     return resA, resB
 
-print(a,b)
-print(crossover(a,b))
-#EFFET DE BORD
-print(a,b)
