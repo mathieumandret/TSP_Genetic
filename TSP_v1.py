@@ -37,10 +37,15 @@ while (len(population) < EFFECTIF_INITIAL):
     numpy.random.shuffle(modele)
     #Cast en tuple pour permettre le add
     population.add(tuple(modele))
+
+#Repasser en liste pour eviter les casts
+population = list(population)
+for i in range(len(population)):
+    population[i] = list(population[i])
+
 """
 CALCUL DE LA VALABILITE DE CHAQUE INDIVIDU
 """
-
 
 def valabilite(chemin):
     global carte
@@ -107,12 +112,10 @@ def evoluer(population, freq_mut):
     en faisant potentiellement muter les chemin selon freq_mut
     """
 
-    #TODO eviter le castFest ici aussi
-
     meilleurs = meilleursIndividus(population, 10)
     nouvelle_pop = []
     for i in range(len(meilleurs) - 1):
-        e1, e2 = crossover(list(meilleurs[i]), list(meilleurs[i + 1]))
+        e1, e2 = crossover((meilleurs[i]), (meilleurs[i + 1]))
         #Nombre aleatoire determinant si le chemin doit ou non muter
         r = numpy.random.randint(0, 100)
         #Simulation d'une probabilité de fre_mut de muter
@@ -125,8 +128,8 @@ def evoluer(population, freq_mut):
         nouvelle_pop.append(e2)
     return nouvelle_pop
 
-nbGen = 5
-freq_mut = 1
+nbGen = 100
+freq_mut = 20
 meilleurChemin()
 print(MEILLEURCHEMIN, MEILLEURSCORE)
 for i in range(nbGen):
