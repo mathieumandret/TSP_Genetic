@@ -1,7 +1,12 @@
-from city import City
-from chemin import Chemin
 from population import Population
 
-p = Population(5, 5)
-p.evolve(5)
-    
+nombre_villes = 100
+effectif_initial = 5
+mutation = 10
+generations = 30
+
+p = Population(effectif_initial, nombre_villes)
+print(p)
+for i in range(generations):
+    p.evolve(effectif_initial, mutation)
+    print(p)

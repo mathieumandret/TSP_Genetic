@@ -3,15 +3,6 @@ import random
 import copy
 from chemin import Chemin
 
-
-def estLegal(chemin):
-    """
-    Verifie si un chemin contient ou non
-    des elements dupliques
-    """
-    return len(chemin) == len(set(chemin))
-
-
 def decouper(chemin, gauche, droite):
     """
     Pour un chemin complet retourne
@@ -46,17 +37,19 @@ def recoller(partie_interieure, partie_exterieure, gauche, droite):
             res.append(partie_interieure[indiceInte])
             indiceInte += 1
     chemin_res = Chemin.fromArray(res)
+    print(chemin_res)
     return chemin_res
 
 
 #Detection et reparation des elements dupliques
 def reparer(partint, partex, echanges, gauche, droite):
-    while ((recoller(partint, partex, gauche, droite)).estLegal()) == False:
+    while ((recoller(partint, partex, gauche, droite)).isLegal()) == False:
         for i in range(len(partex)):
             #Si un element de la partie ext appartient aussi à  la partie interieure
             if partex[i] in partint:
                 #On prends l'element correspondant dans le dictionnaire des échanges
                 remp = echanges[partex[i]]
+                print(remp)
                 #On remplace l'element d2uplique par sa correspondance dans le dictionnaire des echanges
                 partex[i] = remp
 
