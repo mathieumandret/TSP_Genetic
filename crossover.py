@@ -55,6 +55,11 @@ def recoller(partie_interieure, partie_exterieure, gauche, droite):
             indiceInte += 1
     return res
 
+# QUE DES FONCTIONS JUSTE ICI #
+
+
+#Ici on ne modifie que partint et partex qui sont réinitialisées a chaque appel 
+#de crossover() 
 
 #Detection et reparation des elements dupliques
 def reparer(partint, partex, echanges, gauche, droite):
@@ -79,6 +84,7 @@ def crossover(c1, c2):
     while droite <= gauche:
         droite = random.randint(0, len(chemin1))
     #Echange des chemin en fonction des points de decoupe
+    #Ici on modifie les parametres, utiliser une fonction
     chemin1[gauche:droite], chemin2[gauche:droite] = chemin2[
         gauche:droite], chemin1[gauche:droite]
     #Enregistrement des echanges effectues
