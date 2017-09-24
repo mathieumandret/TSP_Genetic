@@ -1,10 +1,7 @@
 #coding: utf-8
-
 import random
 import copy
-
-a = [1, 2, 3, 4, 5, 6, 7, 8]
-b = [3, 7, 5, 1, 6, 8, 2, 4]
+from chemin import Chemin
 
 
 def estLegal(chemin):
@@ -21,11 +18,7 @@ def decouper(chemin, gauche, droite):
     la partie interieure et exterieure
     aux points de découpe
     """
-    #Partie exterieure de la decoupe
-    partex = chemin[:gauche] + chemin[droite:]
-    #Partie interieur de la decoupe
-    partint = chemin[gauche:droite]
-    return partint, partex
+    return chemin[gauche:droite], chemin[:gauche] + chemin[droite:]
 
 
 def recoller(partie_interieure, partie_exterieure, gauche, droite):
@@ -35,8 +28,7 @@ def recoller(partie_interieure, partie_exterieure, gauche, droite):
     selon les points de decoupe
     """
     res = []
-    indiceInte = 0
-    indiceExte = 0
+    indiceInte, indiceExte = 0, 0
     for i in range(len(partie_exterieure) + len(partie_interieure)):
         #Si l'indice est strictement inférieur a gauche,
         #on ajoute un élément de l'exterieur
@@ -53,17 +45,13 @@ def recoller(partie_interieure, partie_exterieure, gauche, droite):
         else:
             res.append(partie_interieure[indiceInte])
             indiceInte += 1
-    return res
+    chemin_res = Chemin.fromArray(res)
+    return chemin_res
 
-# QUE DES FONCTIONS JUSTE ICI #
-
-
-#Ici on ne modifie que partint et partex qui sont réinitialisées a chaque appel 
-#de crossover() 
 
 #Detection et reparation des elements dupliques
 def reparer(partint, partex, echanges, gauche, droite):
-    while (estLegal(recoller(partint, partex, gauche, droite))) == False:
+    while ((recoller(partint, partex, gauche, droite)).estLegal()) == False:
         for i in range(len(partex)):
             #Si un element de la partie ext appartient aussi à  la partie interieure
             if partex[i] in partint:
@@ -75,8 +63,7 @@ def reparer(partint, partex, echanges, gauche, droite):
 
 def crossover(c1, c2):
     #Copie des chemins pour eviter les effets de bord
-    chemin1 = copy.copy(c1)
-    chemin2 = copy.copy(c2)
+    chemin1, chemin2 = copy.copy(c1), copy.copy(c2)
     #Selection aléatoire de 2 points de découpe
     gauche = random.randint(0, len(chemin1) - 1)
     droite = random.randint(0, len(chemin1))
@@ -88,11 +75,9 @@ def crossover(c1, c2):
     chemin1[gauche:droite], chemin2[gauche:droite] = chemin2[
         gauche:droite], chemin1[gauche:droite]
     #Enregistrement des echanges effectues
-    echangesB = {}
-    echangesA = {}
+    echangesB ,echangesA = {}, {}
     for i in range(len(chemin2[gauche:droite])):
         echangesA[chemin1[gauche:droite][i]] = chemin2[gauche:droite][i]
-
     for i in range(len(chemin1[gauche:droite])):
         echangesB[chemin2[gauche:droite][i]] = chemin1[gauche:droite][i]
     #Decoupage des chemins
@@ -103,5 +88,6 @@ def crossover(c1, c2):
     reparer(partintB, partexB, echangesB, gauche, droite)
     resA = recoller(partintA, partexA, gauche, droite)
     resB = recoller(partintB, partexB, gauche, droite)
-    return resA, resB
-
+    chemin_modA = Chemin.fromArray(resA)
+    chemin_modB = Chemin.fromArray(resB)
+    return chemin_modA, chemin_modB
