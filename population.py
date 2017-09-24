@@ -55,20 +55,19 @@ class Population:
         bestInds = []
         #Nouvelle population
         new_pop = []
+        print(len(self.individus))
         for i in range(eff_new_gen):
             bestInds.append(self.individus[i])
         for i in range(len(bestInds)-1):
-            print("Entree dans le crossover")
-            e1,e2 = bestInds[i].crossover(bestInds[i+1])
-            print("Sortie du crossover")
+            e1,e2 = bestInds[i].betterCrossover(bestInds[i+1])
             r = randint(0,100)
             if r < mut_rate:
                 e1.mutate()
             r = randint(0,100)
             if r < mut_rate:
-                e1.mutate()
+                e2.mutate()
             new_pop.append(e1)
             new_pop.append(e2)
-
         self.individus = new_pop
         self.generation +=1
+

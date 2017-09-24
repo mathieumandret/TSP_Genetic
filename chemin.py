@@ -29,6 +29,43 @@ class Chemin:
             dist += self.liste_villes[i].distanceTo(self.liste_villes[i + 1])
         return dist
 
+    def betterCrossover(self, other):
+        #Forme cannonique
+        child1 = [None] * len(self)
+        child2 = [None] * len(self)
+        debut, fin = randint(0, len(self)), randint(0, len(self))
+
+        if  debut < fin: 
+            #Copier le contenu de l'intervalle depuis le parent1
+            for i in range(debut, fin):
+                child1[i] = self[i]
+                child2[i] = other[i]
+        elif debut > fin:
+            for i in range(fin, debut):
+                child1[i] = self[i]
+                child2[i] = other[i]
+
+        #Parcours du deuxieme parent
+        for i in range(len(other)):
+            #Si la ville courante n'est pas dans l'enfant
+            if other[i] not in child1:
+                #Rechercher la premiere cellule vide
+                for j in range(len(child1)):
+                    if child1[j] == None:
+                        child1[j] = other[j]
+                        break
+
+        for i in range(len(self)):
+            #Si la ville courante n'est pas dans l'enfant
+            if self[i] not in child2:
+                #Rechercher la premiere cellule vide
+                for j in range(len(child2)):
+                    if child2[j] == None:
+                        child2[j] = self[j]
+                        break
+
+        return Chemin.fromArray(child1), Chemin.fromArray(child2)
+
     def mutate(self):
         """
         Echange la postion de 2 villes dans le chemin
@@ -103,38 +140,38 @@ class Chemin:
             Pour un chemin, retourne sa découpe
             selon 2 points
             """
-            return chemin[gauche:droite], chemin[:gauche] + chemin[droite:]
+            avant = chemin[:gauche]
+            milieu = chemin[gauche:droite]
+            apres = chemin[droite:]
+            return avant, milieu, apres
 
-        def recoller(inte, exte, gauche, droite):
+        def recoller(avant, milieu, apres, gauche, droite):
             print('recollage')
             """
             Recolle une partie interieure et exterieure
             d'une decoupe selon gauche, droite
             """
-            reco = []
-            ii, ie = 0, 0
-            for i in range(len(inte) + len(exte)):
-                if i < gauche:
-                    reco.append(exte[ie])
-                    ie += 1
-                elif i >= droite:
-                    reco.append(exte[ie])
-                    ie += 1
-                else:
-                    reco.append(inte[ii])
-                    ii += 1
+            reco = avant + milieu + apres
+            print('fait')
             return self.fromArray(reco)
 
-        def reparer(inte, exte, echanges, gauche, droite):
+        def reparer(avant, milieu, apres, echanges, gauche, droite):
             print('reparation')
             """
             Utilise le dictionnaire d'echanges pour eliminer
             les doublons d'un chemin
             """
-            while (recoller(inte, exte, gauche, droite)).isLegal() == False:
-                for i in range(len(exte)):
-                    if exte[i] in inte:
-                        exte[i] = echanges[exte[i]]
+            rep = recoller(avant, milieu, apres, gauche, droite)
+            while rep.isLegal() == False:
+                for i in range(len(avant)):
+                    if avant[i] in milieu:
+                        print(avant[i])
+                        avant[i] = echanges[avant[i]]
+                for i in range(len(apres)):
+                    if apres[i] in milieu:
+                        apres[i] = echanges[apres[i]]
+                rep = recoller(avant, milieu, apres, gauche, droite)
+            return rep
 
         def swap(chemin1, chemin2, gauche, droite):
             """
@@ -155,20 +192,20 @@ class Chemin:
         #2 chemins apres l'echange
         A, B = swap(self.liste_villes, other.liste_villes, gauche, droite)
         # Parties interieures et exterieure de la decoupe
-        inteA, exteA = decouper(A, gauche, droite)
-        inteB, exteB = decouper(B, gauche, droite)
+        avantA, milieuA, exteA = decouper(A, gauche, droite)
+        avantB, milieuB, exteB = decouper(B, gauche, droite)
         #Dictionnaires qui contiendront la liste des echanges
         Aswaps, Bswaps = {}, {}
         #Pour chaque element de la partie interieure de A
-        for i in range(len(inteA)): 
-            #On ajoute au dictionnaire de B, l'element courant dans B 
+        for i in range(len(milieuA)):
+            #On ajoute au dictionnaire de B, l'element courant dans B
             #comme cle, et celui de A comme valeur
-            Bswaps[inteB[i]] = inteA[i]
-        for i in range(len(inteB)): 
-            Aswaps[inteA[i]] = inteB[i]
-        #Avec ces dictionnaires, on peut reparer les chemins contenant des 
+            Bswaps[milieuB[i]] = milieuA[i]
+        for i in range(len(milieuB)):
+            Aswaps[milieuA[i]] = milieuB[i]
+        #Avec ces dictionnaires, on peut reparer les chemins contenant des
         #doublons
-        reparer(inteA, exteA, Aswaps, gauche, droite)
-        reparer(inteB, exteB, Bswaps, gauche, droite)
-        #Recoller les parties
-        return Chemin.fromArray(recoller(inteA, exteA, gauche, droite)), Chemin.fromArray(recoller(inteB, exteB, gauche, droite))
+        return Chemin.fromArray(
+            reparer(avantA, milieuA, exteA, Aswaps, gauche, droite)
+        ), Chemin.fromArray(
+            reparer(avantB, milieuB, exteB, Bswaps, gauche, droite))
