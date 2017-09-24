@@ -1,5 +1,0 @@
-syn keyword CTagsMember test_mutate
-syn keyword CTagsGlobalVariable MEILLEURSCORE dup i droite gauche pere population G b EFFECTIF_INITIAL A MEILLEURCHEMIN carte arr echangesA NBVILLES modele echangesB mere G2 a
-syn keyword CTagsFunction crossover detecter_dup mutate swap init_map recoller potentially_mutate decouper estLegal detail_path meilleurChemin get_weight store_path_with_weight valabilite reparer gen_perms
-syn keyword CTagsClass PathMethodsUnitTest
-
