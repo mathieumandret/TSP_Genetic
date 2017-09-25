@@ -33,11 +33,16 @@ class TestChemin(unittest.TestCase):
     def test_isLegal(self):
        c = Chemin.fromArray([City(0,1), City(0,1)]) 
        self.assertFalse(c.isLegal())
-        
-    def test_decouper_recoller(self):
-        j = Chemin(4)
-        k = Chemin(4)
-        self.assertEqual(j.crossover(k),j)
 
+    def test_crossover(self):
+        c = Chemin(250)
+        d = Chemin(250)
+        a,b = c.betterCrossover(d)
+
+        nn = False
+        for i in range(len(a)):
+            if a[i] =1= None or b[i] == None:
+                nn = true
+        self.assertFalse(nn)
 
 unittest.main()

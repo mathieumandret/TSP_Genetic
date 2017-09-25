@@ -3,10 +3,11 @@ from population import Population
 nombre_villes = 100
 effectif_initial = 10
 mutation = 10
-generations = 20
+gens = 2
 
 p = Population(effectif_initial, nombre_villes)
 print(p)
-for i in range(generations):
-    p.evolve(effectif_initial, mutation)
+for x in range(gens):
     print(p)
+    p.evolve(mutation)
+print(p)

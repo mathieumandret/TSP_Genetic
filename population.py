@@ -10,16 +10,21 @@ class Population:
         Initialise une population de  nbInd chemins
         reliant nbVilles villes
         """
-        self.individus = set()
+        self.individus = []
         self.generation = 0
         self.bestScore = math.inf
         self.fittest = None      
         carte = Chemin(nbVilles)
-        self.individus.add(carte)
+        self.individus.append(carte)
         #On peut déjà ajouter la carte comme un individu
         while len(self.individus) < nbInd:
-            self.individus.add(carte.shuffle())
-        self.individus = list(self.individus)
+            self.individus.append(carte.shuffle())
+
+    @classmethod
+    def fromArray(self, arr):
+        p = Population(0,0)
+        p.individus = arr
+        return p
 
     def getFittest(self):
         """
@@ -40,26 +45,24 @@ class Population:
 
     def __repr__(self):
         desc = ""
-        desc += " Meilleur individu: " + str(self.getFittest()[0])
+        desc += "Meilleur individu: " + str(self.getFittest()[0])
         desc += "\nMeilleur score: " + str(self.getFittest()[1])
         return desc
 
-    def evolve(self, eff_new_gen, mut_rate):
+    def evolve(self,mut_rate):
         """
         Evolue la population courante en prenant
         eff_new_gen meilleurs individus
         """
         #Ranger la population avec les meilleurs individus en premier
         self.orderByFitness()
-        #Tableau pour les n meilleurs individus
-        bestInds = []
         #Nouvelle population
         new_pop = []
-        print(len(self.individus))
-        for i in range(eff_new_gen):
-            bestInds.append(self.individus[i])
-        for i in range(len(bestInds)-1):
-            e1,e2 = bestInds[i].betterCrossover(bestInds[i+1])
+        if range(0, len(self.individus)-2,2) == (0,0):
+            print("ERREUR")
+        for i in range(0, len(self.individus)-2,2):
+            #Creation de 2 enfants a partir de l'element courant et du suivant
+            e1,e2 = self.individus[i].betterCrossover(self.individus[i+1])
             r = randint(0,100)
             if r < mut_rate:
                 e1.mutate()
