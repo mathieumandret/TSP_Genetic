@@ -1,8 +1,31 @@
 #coding: utf-8
 
-from Ville import Ville
+from Population import Population
 
-v = Ville(1,2)
-v.x = 4
-
-
+p = Population(10, 259)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)
+p.evoluer(10)

@@ -26,4 +26,17 @@ class Ville:
         """
         Retourne la distance entre cette ville et un autre
         """
+        
+        if not isinstance(other, Ville):
+            raise ValueError('distanceTo doit prendre une ville en parametre')
+
         return hypot(other.x - self.x, other.y - self.y)
+
+    def __eq__(self, other):
+        """
+        Permet de comparer 2 villes
+        """
+        if not isinstance(other, Ville):
+            return False
+        else:
+            return self.x == other.x and self.y == other.y

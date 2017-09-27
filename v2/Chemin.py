@@ -25,9 +25,13 @@ class Chemin:
         """
         #Il faut que la liste passée en parametre soit une liste de Villes
         #et qu'elle contiennent au moins un element
-        if len(liste_villes) == 0 or not isinstance(liste_villes[0], Ville):
+        if len(liste_villes) == 0:
             #TODO définir une exception personnalisée
-            raise ValueError('Il faut passer un tableau d\' au moins 1 tuple a la methode fromArray de Chemin')
+            raise ValueError('liste_villes est vide')
+        if not isinstance(liste_villes[0], Ville):
+            print(liste_villes)
+            raise ValueError('liste_ville du mauvais type')
+
         #Ici on est sur que le tableau est valide
         #On cree un chemin vide 
         c = Chemin(0)
@@ -70,8 +74,7 @@ class Chemin:
         if not isinstance(other,Chemin) or len(self)!=len(other):
             raise ValueError('Un crossover doit etre fait entre 2 chemins de longueur egale')
         #Fils en forme canonique
-        premier_fils = [None] * len(self)
-        second_fils = [None] * len(self)
+        fils = [None] * len(self)
 
         #Selection aléatoire de 2 points points de découpe de 0 a longueur parent
         debut, fin = randint(0,len(self)), randint(0, len(self))
@@ -80,37 +83,31 @@ class Chemin:
         #dans le sens normal
         if debut < fin:
             for i in range(debut, fin):
-                #Le premier fils prends des élements du premier parent
-                premier_fils[i] = self.liste_villes[i]
-                #Le second fils prends des élements du deuxième parent
-                second_fils[i] = other.liste_villes[i]
+                #Le fils prends des élements du premier parent
+                fils[i] = other.liste_villes[i]
 
         #Si le point de debut est plus grand que le point de fin, inverser
         elif debut > fin:
             for i in range(fin, debut):
-                premier_fils[i] = self.liste_villes[i]
-                second_fils[i] = other.liste_villes[i]
+                fils[i] = other.liste_villes[i]
 
         #Si les 2 points sont égaux(ce qui est peut probable pour un nombre de villes elevé, ne rien faire et laisser les fils tels quels
-        #A ce point, il reste de "trous" (None) dans les fils, il faut les combler
+        #A ce point, il reste de "trous" (None) dans le fils, il faut les combler
 
         #Pour chaque element du premier parent
         for i in range(len(self)):
-            #On verifie que l'element courant du parent ne soit pas déjà présent dans le second fils
-            if self.liste_villes[i] not in second_fils:
+            #On verifie que l'element courant du parent ne soit pas déjà présent dans le fils
+            if not self.liste_villes[i] in fils:
                 #Chercher le premier trou dans le fils
-                for j in range(len(second_fils)):
-                    if second_fils[j] == None:
+                for j in range(len(fils)):
+                    if fils[j] == None:
                         #On a trouvé un trou, y placer l'élément courant du parent
-                        second_fils[j] = self.liste_villes[i]
-            #Utiliser la meme boucle pour le premier_fils
-            if other.liste_villes[i] not in premier_fils:
-                for j in range(len(premier_fils)):
-                    if premier_fils[j] == None:
-                        premier_fils[j] = other.liste_villes[i]
+                        fils[j] = self.liste_villes[i]
+                        #On arrete de chercher la prochain trou
+                        break
 
         #On veut retourner 2 chemins:
-        return Chemin.fromArray(premier_fils), Chemin.fromArray(second_fils)
+        return Chemin.fromArray(fils)
 
     def fitness(self):
         """
