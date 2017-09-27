@@ -1,7 +1,7 @@
 from chemin import Chemin
 from numpy import arange
 from numpy.random import shuffle
-from random import randint
+from random import randint, sample
 import math
 
 class Population:
@@ -16,9 +16,10 @@ class Population:
         self.fittest = None      
         carte = Chemin(nbVilles)
         self.individus.append(carte)
-        #On peut déjà ajouter la carte comme un individu
-        while len(self.individus) < nbInd:
-            self.individus.append(carte.shuffle())
+        #TODO FAIRE UN TRUC MOINS DEGUELASSE ENCULE
+        for i in range(nbInd):
+            self.individus.append(Chemin(0,sample(carte.liste_villes, len(carte))))
+        print(self.individus)
 
     @classmethod
     def fromArray(self, arr):

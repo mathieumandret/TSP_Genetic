@@ -54,6 +54,13 @@ class Chemin:
         Permet l'indexation: Chemin[pos]
         """
         return self.liste_villes[pos]
+    
+    def __setitem__(self, key, item):
+        """
+        Permet la modification 
+        avec Chemin[key] = item 
+        """
+        self.liste_villes[key] = item 
 
     def crossover(self, other):
         """
@@ -116,6 +123,13 @@ class Chemin:
             #Ajouter la distance entre les 2 points courant a la distance totale
             fitness += self.liste_villes[i].distanceTo(self.liste_villes[i+1])
         return fitness
+
+    def muter(self):
+        """
+        Echange aléatoirement la position de 2 villes dans le chemin
+        """
+        x, y = randint(0, len(self)), randint(0, len(self))
+        self.liste_villes[x], self.liste_villes[y] = self.liste_villes[y], self.liste_villes[x]
 
 
 
