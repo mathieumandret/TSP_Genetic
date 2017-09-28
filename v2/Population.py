@@ -88,6 +88,8 @@ class Population:
         #Parcours des chemin, en les croisant un a un 
         for i in range(len(self.individus)-1):
             nouvelle_pop.append(self.individus[i].crossover(self.individus[i+1]))
+        #Ajouter un croisement premier x deuxieme
+        nouvelle_pop.append(self.individus[0].crossover(self.individus[1]))
         self.individus = nouvelle_pop
         self.generation += 1
 

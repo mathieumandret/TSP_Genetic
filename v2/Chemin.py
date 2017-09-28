@@ -16,7 +16,7 @@ class Chemin:
         self.liste_villes = []
         for i in range(nombre_villes):
             #Ajouter une ville aléatoires au chemin
-            self.liste_villes.append(Ville(randint(0,100), randint(0,100)))
+            self.liste_villes.append(Ville(randint(0,500), randint(0,500)))
 
     @classmethod
     def fromArray(self, liste_villes):
@@ -26,7 +26,6 @@ class Chemin:
         #Il faut que la liste passée en parametre soit une liste de Villes
         #et qu'elle contiennent au moins un element
         if len(liste_villes) == 0:
-            #TODO définir une exception personnalisée
             raise ValueError('liste_villes est vide')
         if not isinstance(liste_villes[0], Ville):
             print(liste_villes)
@@ -91,6 +90,7 @@ class Chemin:
             for i in range(fin, debut):
                 fils[i] = other.liste_villes[i]
 
+
         #Si les 2 points sont égaux(ce qui est peut probable pour un nombre de villes elevé, ne rien faire et laisser les fils tels quels
         #A ce point, il reste de "trous" (None) dans le fils, il faut les combler
 
@@ -101,7 +101,6 @@ class Chemin:
                 #Chercher le premier trou dans le fils
                 for j in range(len(fils)):
                     if fils[j] == None:
-                        #On a trouvé un trou, y placer l'élément courant du parent
                         fils[j] = self.liste_villes[i]
                         #On arrete de chercher la prochain trou
                         break
