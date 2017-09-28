@@ -1,8 +1,8 @@
 #coding: utf-8
 
 from Chemin import Chemin
-from math import inf
 from random import sample
+import pdb
 
 
 class Population:
@@ -19,10 +19,10 @@ class Population:
         self.individus = []
         #Pour recuperer la meilleure fitness, on doit être sur
         #que le premiere valeur qu'on evalueara sera inférieure a meilleurFitness
-        self.meilleurFitness = inf
+        self.meilleurFitness = float('inf')
         #Membre de la population de distance la plus courte, inexistant a l'initilisation
         self.meilleurChemin = None
-        #Creation de la carte, qui est un chemi1n dont l'ordre n'importe pas, il sert de base a la
+        #Creation de la carte, qui est un chemin dont l'ordre n'importe pas, il sert de base a la
         #generation de la population
         carte = Chemin(nbVilles)
         #La carte est aussi un chemin valide, l'ajouter
@@ -86,13 +86,17 @@ class Population:
         #Tri avec les meilleurs individus en premier
         self.trierMeilleurs()
         #Parcours des chemin, en les croisant un a un 
-        for i in range(len(self.individus)-1):
-            nouvelle_pop.append(self.individus[i].crossover(self.individus[i+1]))
-        #Ajouter un croisement premier x deuxieme
+        for x in range(0, len(self.individus)-1):
+            #Ne genere pas de None
+            nouvelle_pop.append(self.individus[x].crossover(self.individus[x+1]))
         nouvelle_pop.append(self.individus[0].crossover(self.individus[1]))
-        self.individus = nouvelle_pop
-        self.generation += 1
+        print(nouvelle_pop)
 
+
+
+        
+
+        
             
         
 

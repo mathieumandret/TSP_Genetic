@@ -1,7 +1,9 @@
 #coding: utf-8
 
+
 from Ville import Ville
 from random import randint
+import pdb
 
 class Chemin:
     """
@@ -28,8 +30,7 @@ class Chemin:
         if len(liste_villes) == 0:
             raise ValueError('liste_villes est vide')
         if not isinstance(liste_villes[0], Ville):
-            print(liste_villes)
-            raise ValueError('liste_ville du mauvais type')
+            raise ValueError('liste_ville du mauvais type: ' + str(type(liste_villes)) + str(type(liste_villes[0])))
 
         #Ici on est sur que le tableau est valide
         #On cree un chemin vide 
@@ -74,7 +75,7 @@ class Chemin:
             raise ValueError('Un crossover doit etre fait entre 2 chemins de longueur egale')
         #Fils en forme canonique
         fils = [None] * len(self)
-
+        
         #Selection aléatoire de 2 points points de découpe de 0 a longueur parent
         debut, fin = randint(0,len(self)), randint(0, len(self))
         
@@ -94,18 +95,14 @@ class Chemin:
         #Si les 2 points sont égaux(ce qui est peut probable pour un nombre de villes elevé, ne rien faire et laisser les fils tels quels
         #A ce point, il reste de "trous" (None) dans le fils, il faut les combler
 
-        #Pour chaque element du premier parent
-        for i in range(len(self)):
-            #On verifie que l'element courant du parent ne soit pas déjà présent dans le fils
-            if not self.liste_villes[i] in fils:
-                #Chercher le premier trou dans le fils
+        for el in self.liste_villes:
+            if el not in fils:
                 for j in range(len(fils)):
                     if fils[j] == None:
-                        fils[j] = self.liste_villes[i]
-                        #On arrete de chercher la prochain trou
+                        fils[j] = el
                         break
 
-        #On veut retourner 2 chemins:
+        #On veut retourner 1 chemin:
         return Chemin.fromArray(fils)
 
     def fitness(self):
