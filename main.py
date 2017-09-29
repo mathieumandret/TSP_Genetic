@@ -2,8 +2,9 @@
 
 from Population import Population
 
-p = Population(5, 10)
-print(p)
-for i in range(1000):
-    p.evoluer(20)
+p = Population(10, 10)
+
+for i in range(100):
+    p.evoluer(10)
+
 print(p)

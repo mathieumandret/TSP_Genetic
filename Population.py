@@ -2,7 +2,6 @@
 
 from Chemin import Chemin
 from random import sample, randint
-import pdb
 
 
 class Population:
@@ -19,14 +18,15 @@ class Population:
         self.individus = []
         #Pour recuperer la meilleure fitness, on doit être sur
         #que le premiere valeur qu'on evalueara sera inférieure a meilleurFitness
+        #On pourrait utiliser math.inf disponible en 3.5
         self.meilleurFitness = float('inf')
         #Membre de la population de distance la plus courte, inexistant a l'initilisation
         self.meilleurChemin = None
         #Creation de la carte, qui est un chemin dont l'ordre n'importe pas, il sert de base a la
         #generation de la population
-        carte = Chemin(nbVilles)
+        carte = Chemin.fromCSV("coords.csv")
         #La carte est aussi un chemin valide, l'ajouter
-        self.individus.append(Chemin.fromArray(carte))
+#        self.individus.append(Chemin.fromArray(carte))
         #Tant qu'on a pas atteint le nombre d'individus cible
         while len(self.individus) < nbIndividus:
             #On ajouter une permutation aléatoires de la carte a la population
@@ -83,16 +83,20 @@ class Population:
         #Parcours des chemin, en les croisant un a un 
         for x in range(0, len(self.individus)-1):
             fils = self.individus[x].crossover(self.individus[x+1])
+            #Simulation d'une mutation aleatoire
             r = randint(0,100)
             if r < mut_freq:
                 fils.muter()
+            #Apres une potentielle mutation, ajouter le fils
             nouvelle_pop.append(fils)
+        #En croisant, les i avec i+1, on réduit de 1 la population, on
+        #recroise donc les 2 premiers individus, puisqu'ils ont la fitness la plus haute
         fils = self.individus[0].crossover(self.individus[1])
         r = randint(0,100)
         if r < mut_freq:
             fils.muter()
         nouvelle_pop.append(fils)
+        #Remplacer l'ancienne population par la nouvelle
         self.individus = nouvelle_pop
         self.generation += 1
-        print(self.generation)
 

@@ -1,9 +1,8 @@
 #coding: utf-8
 
-
+from csv import reader
 from Ville import Ville
 from random import randint
-import pdb
 
 class Chemin:
     """
@@ -15,10 +14,10 @@ class Chemin:
         Initialise un chemin de nombre_villes aléatoires
 
         """
+        #Si on utilise ce constructeur depuis la methode de classe fromArray
         if nombre_villes == 0:
+            #Ne pas creer de liste de villes 
             pass
-        #TODO Probleme: une ville peut apparaitre plusieurs fois dans le chemin, causant des trous dans les fils par crossover !!!
-        #Liste qui contiendra toutes les villes du chemin
         self.liste_villes = set()
         while len(self.liste_villes) < nombre_villes:
             #Ajouter une ville aléatoires au chemin
@@ -26,6 +25,22 @@ class Chemin:
         self.liste_villes = list(self.liste_villes)
         if len(set(self.liste_villes)) != len(self.liste_villes):
             raise ValueError('NON UNIQUES')
+
+    #TODO ajouter une methode fromCSV pour creer une carte
+    @classmethod
+    def fromCSV(self, nom_fichier):
+        """
+        Permet la creation d'un chemin a partir d'un fichier csv 
+        contenant des coordonnées
+        """
+        coords = []
+        with open(nom_fichier, 'r') as fichier:
+            r = reader(fichier)
+            for ligne in r:
+                coords.append(Ville(int(ligne[0]), int(ligne[1])))
+        c = Chemin(0) 
+        c.liste_villes = coords
+        return c
 
     @classmethod
     def fromArray(self, liste_villes):
@@ -71,9 +86,10 @@ class Chemin:
         Croise le chemin courant et un autre pour retourner 2 chemins fils
         """
         #Il faut que les 2 parents soient de la même taille, et que other soit du type Chemin
+        if not isinstance(other, self.__class__):
+            raise ValueError('On ne peut croiser que 2 chemins')
         #Fils en forme canonique
-        fils =[Ville(-1,-1)] * len(self)
-        fils = Chemin.fromArray(fils)
+        fils =[None] * len(self)
         #Selection aléatoire de 2 points points de découpe de 0 a longueur parent
         debut, fin = randint(0,len(self)), randint(0, len(self))
         
@@ -82,26 +98,31 @@ class Chemin:
         if debut < fin:
             for i in range(debut, fin):
                 #Le fils prends des élements du premier parent
-                fils[i] = other.liste_villes[i]
+                fils[i] = other[i]
 
         #Si le point de debut est plus grand que le point de fin, inverser
         elif debut > fin:
             for i in range(fin, debut):
-                fils[i] = other.liste_villes[i]
+                fils[i] = other[i]
 
 
         #Si les 2 points sont égaux(ce qui est peut probable pour un nombre de villes elevé, ne rien faire et laisser les fils tels quels
         #A ce point, il reste de "trous" (None) dans le fils, il faut les combler
-        ref = Ville(-1, -1)
-        #Des Nones restent à la fin pour une liste_villes très grande
-        for el in self.liste_villes:
+
+        #Pour chaque element du parent
+        for el in self:
+            #Si l'element courant n'est pas déjà dans le fils
             if el not in fils:
+                #On parcours toutes les cases du fils a la recherche du premier trou
                 for j in range(len(fils)):
-                    if fils[j] == ref :
+                    #Quand le trou est trouvé
+                    if fils[j] == None :
+                        #Il prends la valeur de l'element courant
                         fils[j] = el
+                        #On n'a pas besoin de reparcourir le fils
                         break
         #On veut retourner 1 chemin:
-        return fils
+        return Chemin.fromArray(fils)
 
     def fitness(self):
         """
@@ -120,7 +141,7 @@ class Chemin:
         Echange aléatoirement la position de 2 villes dans le chemin
         """
         x, y = randint(0, len(self)-1), randint(0, len(self)-1)
-        self.liste_villes[x], self.liste_villes[y] = self.liste_villes[y], self.liste_villes[x]
+        self[x], self[y] = self[y], self[x]
 
 
 
