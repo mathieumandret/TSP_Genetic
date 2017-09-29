@@ -36,7 +36,17 @@ class Ville:
         """
         Permet de comparer 2 villes
         """
-        if not isinstance(other, Ville):
-            return False
+        if not isinstance(other, self.__class__):
+            raise ValueError('Une ville ne peut etre comparee qu avec une autre ville')
         else:
             return self.x == other.x and self.y == other.y
+
+
+    def __ne__(self, other):
+        if not isinstance(other, self.__class__):
+            raise ValueError('Une ville ne peut etre comparee qu avec une autre ville')
+        else:
+            return self.x != other.x or self.y != other.y
+
+    def __hash__(self):
+        return hash(self.__repr__())

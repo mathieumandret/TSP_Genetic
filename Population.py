@@ -1,7 +1,7 @@
 #coding: utf-8
 
 from Chemin import Chemin
-from random import sample
+from random import sample, randint
 import pdb
 
 
@@ -33,19 +33,13 @@ class Population:
             self.individus.append(
                 Chemin.fromArray(sample(carte.liste_villes, len(carte))))
 
+
     def __repr__(self):
         """
         Retourne une représentation textuelle de la population
         """
-        rep = ""
-        for i in range(len(self)):
-            rep += str(self.individus[i])
-            rep += "\n"
-        rep += str(self.meilleurFitness) + "\n"
-        rep += str(self.meilleurChemin)
-        rep += "\n"
-        return rep
-
+        self.eval()
+        return str(self.meilleurFitness)
     def __len__(self):
         """
         Permet l'appel de len() sur une population
@@ -83,23 +77,22 @@ class Population:
         nouvelle_pop = []
         #Evaluation de la population
         self.eval()
+        print(self.meilleurFitness)
         #Tri avec les meilleurs individus en premier
         self.trierMeilleurs()
         #Parcours des chemin, en les croisant un a un 
         for x in range(0, len(self.individus)-1):
-            #Ne genere pas de None
-            nouvelle_pop.append(self.individus[x].crossover(self.individus[x+1]))
-        nouvelle_pop.append(self.individus[0].crossover(self.individus[1]))
-        print(nouvelle_pop)
-
-
-
-        
-
-        
-            
-        
-
-        
-
+            fils = self.individus[x].crossover(self.individus[x+1])
+            r = randint(0,100)
+            if r < mut_freq:
+                fils.muter()
+            nouvelle_pop.append(fils)
+        fils = self.individus[0].crossover(self.individus[1])
+        r = randint(0,100)
+        if r < mut_freq:
+            fils.muter()
+        nouvelle_pop.append(fils)
+        self.individus = nouvelle_pop
+        self.generation += 1
+        print(self.generation)
 

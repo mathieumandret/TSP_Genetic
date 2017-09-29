@@ -13,25 +13,25 @@ class Chemin:
     def __init__(self, nombre_villes):
         """
         Initialise un chemin de nombre_villes aléatoires
+
         """
+        if nombre_villes == 0:
+            pass
+        #TODO Probleme: une ville peut apparaitre plusieurs fois dans le chemin, causant des trous dans les fils par crossover !!!
         #Liste qui contiendra toutes les villes du chemin
-        self.liste_villes = []
-        for i in range(nombre_villes):
+        self.liste_villes = set()
+        while len(self.liste_villes) < nombre_villes:
             #Ajouter une ville aléatoires au chemin
-            self.liste_villes.append(Ville(randint(0,500), randint(0,500)))
+            self.liste_villes.add(Ville(randint(0,500), randint(0,500)))
+        self.liste_villes = list(self.liste_villes)
+        if len(set(self.liste_villes)) != len(self.liste_villes):
+            raise ValueError('NON UNIQUES')
 
     @classmethod
     def fromArray(self, liste_villes):
         """
         Permet la création d'un chemin à partir d'une liste de villes
         """
-        #Il faut que la liste passée en parametre soit une liste de Villes
-        #et qu'elle contiennent au moins un element
-        if len(liste_villes) == 0:
-            raise ValueError('liste_villes est vide')
-        if not isinstance(liste_villes[0], Ville):
-            raise ValueError('liste_ville du mauvais type: ' + str(type(liste_villes)) + str(type(liste_villes[0])))
-
         #Ici on est sur que le tableau est valide
         #On cree un chemin vide 
         c = Chemin(0)
@@ -71,11 +71,9 @@ class Chemin:
         Croise le chemin courant et un autre pour retourner 2 chemins fils
         """
         #Il faut que les 2 parents soient de la même taille, et que other soit du type Chemin
-        if not isinstance(other,Chemin) or len(self)!=len(other):
-            raise ValueError('Un crossover doit etre fait entre 2 chemins de longueur egale')
         #Fils en forme canonique
-        fils = [None] * len(self)
-        
+        fils =[Ville(-1,-1)] * len(self)
+        fils = Chemin.fromArray(fils)
         #Selection aléatoire de 2 points points de découpe de 0 a longueur parent
         debut, fin = randint(0,len(self)), randint(0, len(self))
         
@@ -94,16 +92,16 @@ class Chemin:
 
         #Si les 2 points sont égaux(ce qui est peut probable pour un nombre de villes elevé, ne rien faire et laisser les fils tels quels
         #A ce point, il reste de "trous" (None) dans le fils, il faut les combler
-
+        ref = Ville(-1, -1)
+        #Des Nones restent à la fin pour une liste_villes très grande
         for el in self.liste_villes:
             if el not in fils:
                 for j in range(len(fils)):
-                    if fils[j] == None:
+                    if fils[j] == ref :
                         fils[j] = el
                         break
-
         #On veut retourner 1 chemin:
-        return Chemin.fromArray(fils)
+        return fils
 
     def fitness(self):
         """
@@ -121,7 +119,7 @@ class Chemin:
         """
         Echange aléatoirement la position de 2 villes dans le chemin
         """
-        x, y = randint(0, len(self)), randint(0, len(self))
+        x, y = randint(0, len(self)-1), randint(0, len(self)-1)
         self.liste_villes[x], self.liste_villes[y] = self.liste_villes[y], self.liste_villes[x]
 
 
