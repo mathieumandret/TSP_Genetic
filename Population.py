@@ -23,10 +23,11 @@ class Population:
         #Membre de la population de distance la plus courte, inexistant a l'initilisation
         self.meilleurChemin = None
         #Creation de la carte, qui est un chemin dont l'ordre n'importe pas, il sert de base a la
+        carte = Chemin(nbVilles)
         #generation de la population
-        carte = Chemin.fromCSV("coords.csv")
+#        carte = Chemin.fromCSV("coords.csv")
         #La carte est aussi un chemin valide, l'ajouter
-#        self.individus.append(Chemin.fromArray(carte))
+        self.individus.append(Chemin.fromArray(carte))
         #Tant qu'on a pas atteint le nombre d'individus cible
         while len(self.individus) < nbIndividus:
             #On ajouter une permutation aléatoires de la carte a la population
@@ -78,6 +79,7 @@ class Population:
         #Evaluation de la population
         self.eval()
         print(self.meilleurFitness)
+        print('Evolution')
         #Tri avec les meilleurs individus en premier
         self.trierMeilleurs()
         #Parcours des chemin, en les croisant un a un 

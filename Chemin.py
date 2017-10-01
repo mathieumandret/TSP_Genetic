@@ -1,8 +1,9 @@
-#coding: utf-8
+
 
 from csv import reader
 from Ville import Ville
 from random import randint
+
 
 class Chemin:
     """
@@ -16,21 +17,20 @@ class Chemin:
         """
         #Si on utilise ce constructeur depuis la methode de classe fromArray
         if nombre_villes == 0:
-            #Ne pas creer de liste de villes 
+            #Ne pas creer de liste de villes
             pass
         self.liste_villes = set()
         while len(self.liste_villes) < nombre_villes:
             #Ajouter une ville aléatoires au chemin
-            self.liste_villes.add(Ville(randint(0,500), randint(0,500)))
+            self.liste_villes.add(Ville(randint(0, 1000), randint(0, 1000)))
         self.liste_villes = list(self.liste_villes)
         if len(set(self.liste_villes)) != len(self.liste_villes):
             raise ValueError('NON UNIQUES')
 
-    #TODO ajouter une methode fromCSV pour creer une carte
     @classmethod
     def fromCSV(self, nom_fichier):
         """
-        Permet la creation d'un chemin a partir d'un fichier csv 
+        Permet la creation d'un chemin a partir d'un fichier csv
         contenant des coordonnées
         """
         coords = []
@@ -38,7 +38,7 @@ class Chemin:
             r = reader(fichier)
             for ligne in r:
                 coords.append(Ville(int(ligne[0]), int(ligne[1])))
-        c = Chemin(0) 
+        c = Chemin(0)
         c.liste_villes = coords
         return c
 
@@ -48,7 +48,7 @@ class Chemin:
         Permet la création d'un chemin à partir d'une liste de villes
         """
         #Ici on est sur que le tableau est valide
-        #On cree un chemin vide 
+        #On cree un chemin vide
         c = Chemin(0)
         c.liste_villes = liste_villes
         return c
@@ -67,19 +67,19 @@ class Chemin:
         de villes dans le chemin
         """
         return len(self.liste_villes)
-    
+
     def __getitem__(self, pos):
         """
         Permet l'indexation: Chemin[pos]
         """
         return self.liste_villes[pos]
-    
+
     def __setitem__(self, key, item):
         """
-        Permet la modification 
-        avec Chemin[key] = item 
+        Permet la modification
+        avec Chemin[key] = item
         """
-        self.liste_villes[key] = item 
+        self.liste_villes[key] = item
 
     def crossover(self, other):
         """
@@ -89,11 +89,11 @@ class Chemin:
         if not isinstance(other, self.__class__):
             raise ValueError('On ne peut croiser que 2 chemins')
         #Fils en forme canonique
-        fils =[None] * len(self)
+        fils = [None] * len(self)
         #Selection aléatoire de 2 points points de découpe de 0 a longueur parent
-        debut, fin = randint(0,len(self)), randint(0, len(self))
-        
-        #Si debut est strictement inférieur à fin, on peut traiter les fils 
+        debut, fin = randint(0, len(self)), randint(0, len(self))
+
+        #Si debut est strictement inférieur à fin, on peut traiter les fils
         #dans le sens normal
         if debut < fin:
             for i in range(debut, fin):
@@ -105,7 +105,6 @@ class Chemin:
             for i in range(fin, debut):
                 fils[i] = other[i]
 
-
         #Si les 2 points sont égaux(ce qui est peut probable pour un nombre de villes elevé, ne rien faire et laisser les fils tels quels
         #A ce point, il reste de "trous" (None) dans le fils, il faut les combler
 
@@ -116,7 +115,7 @@ class Chemin:
                 #On parcours toutes les cases du fils a la recherche du premier trou
                 for j in range(len(fils)):
                     #Quand le trou est trouvé
-                    if fils[j] == None :
+                    if fils[j] == None:
                         #Il prends la valeur de l'element courant
                         fils[j] = el
                         #On n'a pas besoin de reparcourir le fils
@@ -126,22 +125,28 @@ class Chemin:
 
     def fitness(self):
         """
-        Retourne la valeur de fitness de ce chemin, qui correspond a 
+        Retourne la valeur de fitness de ce chemin, qui correspond a
         la distance totale entre ses villes
         """
         fitness = 0
         #Parcours de la premiere a l'avant derniere ville du chemin
-        for i in range(len(self)-1):
+        for i in range(len(self) - 1):
             #Ajouter la distance entre les 2 points courant a la distance totale
-            fitness += self.liste_villes[i].distanceTo(self.liste_villes[i+1])
+            fitness += self.liste_villes[i].distanceTo(
+                self.liste_villes[i + 1])
         return fitness
+
+    def toPlot(self):
+        x = []
+        y = []
+        for v in self.liste_villes:
+            x.append(v.x)
+            y.append(v.y)
+        return x, y
 
     def muter(self):
         """
         Echange aléatoirement la position de 2 villes dans le chemin
         """
-        x, y = randint(0, len(self)-1), randint(0, len(self)-1)
+        x, y = randint(0, len(self) - 1), randint(0, len(self) - 1)
         self[x], self[y] = self[y], self[x]
-
-
-

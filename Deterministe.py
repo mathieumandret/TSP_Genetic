@@ -21,8 +21,6 @@ for chemin in chemins:
         score = fit
         best = chemin
     print(score, best)
-        
-        
 
 
 
