@@ -26,7 +26,6 @@ class Ville:
         """
         Retourne la distance entre cette ville et un autre
         """
-        
         if not isinstance(other, Ville):
             raise ValueError('distanceTo doit prendre une ville en parametre')
 
@@ -44,7 +43,7 @@ class Ville:
 
     def __ne__(self, other):
         """
-        Permet de comparer 2 villes 
+        Permet de comparer 2 villes
         """
         if not isinstance(other, self.__class__):
             return True
