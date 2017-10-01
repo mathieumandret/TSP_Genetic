@@ -150,3 +150,4 @@ class Chemin:
         """
         x, y = randint(0, len(self) - 1), randint(0, len(self) - 1)
         self[x], self[y] = self[y], self[x]
+

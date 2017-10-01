@@ -1,7 +1,9 @@
 #coding: utf-8
 
 from Chemin import Chemin
-from random import sample, randint
+from random import sample, randint, uniform
+from copy import deepcopy
+import pdb
 
 
 class Population:
@@ -40,6 +42,9 @@ class Population:
         #On veut associer a chaque chemin sa valeur de fitness pour ne pas avoir a la
         #recalculer a chaque evaluation
         self.cache_fitness = {}
+        #Meilleur chemin de la generation courante
+        self.meilleurCourant = None
+
 
     def __repr__(self):
         """
@@ -57,8 +62,18 @@ class Population:
         """
         Met a jour les valeur meilleurFitness et meilleurChemin
         """
+        self.trierMeilleurs()
+        self.meilleurCourant = self.individus[0]
+        #Reinitialisation de la fitness total
+        self.totalFitness = 0
         #Parcours de tous les chemins de la population
         for chemin in self.individus:
+            #Les chemins reviennent tous a leur point de depart, mais on ne peut pas avoir de doublon dans un chemin
+            #On doit donc rajouter la premiere ville à la fin de la liste au moment de l'evaluation pour avoir
+            #une distance correcte, mais si on modifie le chemin, il ne pourra plus etre croisé avec un autre, puisqu'il
+            #contiendra des doublons, on fait donc une copie a laquelle on rajoute la premier ville
+#            cp = deepcopy(chemin)
+#            cp.liste_villes.append(chemin[0])
             #Si la valeur de fitness existe dans le cache, la recuperer
             if chemin in self.cache_fitness:
                 fit = self.cache_fitness[chemin]
@@ -66,6 +81,8 @@ class Population:
             else:
                 fit = chemin.fitness()
                 self.cache_fitness[chemin] = fit
+            #Ajouter la fitness de l'objet courant au total
+            self.totalFitness += fit
             #Si le chemin courant a une meilleure fitness que le record actuel
             if fit < self.meilleurFitness:
                 self.meilleurChemin = chemin
@@ -78,6 +95,21 @@ class Population:
         #Tri avec pour cle la fonction fitness de Chemin
         self.individus.sort(key=lambda x: x.fitness())
 
+    def selection(self):
+        """
+        Selectionne un individus de la population en fonction de leur fitness
+        La fonction eval doit toujours avoir été appellée pour la génération courante
+        avant cette fonction
+        """
+        i = 0
+        #pdb.set_trace()
+        ran = uniform(0, self.totalFitness)
+        while (ran > 0):
+            ran -= self.cache_fitness[self.individus[i]]
+            i += 1
+        i -= 1
+        return self.individus[i]
+
     def evoluer(self, mut_freq):
         """
         Fait evoler la population vers une nouvelle generation,
@@ -88,23 +120,14 @@ class Population:
         #Evaluation de la population
         self.eval()
         #Tri avec les meilleurs individus en premier
-        self.trierMeilleurs()
-        #Parcours des chemin, en les croisant un a un
-        for x in range(0, len(self.individus) - 1):
-            fils = self.individus[x].crossover(self.individus[x + 1])
-            #Simulation d'une mutation aleatoire
+        #self.trierMeilleurs()
+        #Pour chaque element de la population parente
+        for i in range(len(self.individus)):
+            fils = self.selection().crossover(self.selection())
             r = randint(0, 100)
             if r < mut_freq:
                 fils.muter()
-            #Apres une potentielle mutation, ajouter le fils
             nouvelle_pop.append(fils)
-        #En croisant, les i avec i+1, on réduit de 1 la population, on
-        #recroise donc les 2 premiers individus, puisqu'ils ont la fitness la plus haute
-        fils = self.individus[0].crossover(self.individus[1])
-        r = randint(0, 100)
-        if r < mut_freq:
-            fils.muter()
-        nouvelle_pop.append(fils)
         #Remplacer l'ancienne population par la nouvelle
         self.individus = nouvelle_pop
         self.generation += 1

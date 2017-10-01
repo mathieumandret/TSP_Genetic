@@ -82,8 +82,10 @@ else:
 p.eval()
 #Recuperation du meilleur element
 best = p.meilleurChemin
+current = p.meilleurCourant
 #Coordonées du meilleur element
 x, y = best.toPlot()
+cx, cy = current.toPlot()
 
 limite = 0
 
@@ -93,20 +95,25 @@ def animer(i):
     if limite < options.nbGens:
         p.evoluer(options.freq_mut)
         best = p.meilleurChemin
-        plt.title('Generation: ' + str(p.generation))
+        current = p.meilleurCourant
+        plt.title('Generation: ' + str(p.generation) + ' Meilleur score: ' + str(p.meilleurFitness))
         nx, ny = best.toPlot()
+        ncx, ncy = current.toPlot()
         graph.set_data(nx, ny)
+        graph2.set_data(ncx, ncy)
         limite += 1
 
 
 #Si on veut afficher le graphe
 if options.graph:
-    fig1 = plt.figure()
-    plt.title('Generation: ' + str(p.generation))
+    fig1, axarr = plt.subplots(2)
+    plt.title('Generation: ' + str(p.generation) + ' Meilleur score: ' + str(p.meilleurFitness))
     #Affichage des points
-    plt.scatter(x, y)
+    axarr[0].scatter(x, y)
+    axarr[1].scatter(x, y)
     #Affichage des lignes
-    graph, = plt.plot(x, y)
+    graph, = axarr[0].plot(x, y)
+    graph2, = axarr[1].plot(cx, cy)
     ani = FuncAnimation(fig1, animer, interval=20)
     plt.show()
 

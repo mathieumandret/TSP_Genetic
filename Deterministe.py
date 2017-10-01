@@ -33,6 +33,7 @@ for perm in (permutations(carte)):
     chemins.append(Chemin.fromArray(list(perm)))
 
 for chemin in chemins:
+    chemin.liste_villes.append(chemin.liste_villes[0])
     fit = chemin.fitness()
     if fit < score:
         score = fit
