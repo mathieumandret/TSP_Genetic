@@ -134,7 +134,7 @@ class Chemin:
             #Ajouter la distance entre les 2 points courant a la distance totale
             fitness += self.liste_villes[i].distanceTo(
                 self.liste_villes[i + 1])
-        return fitness
+        return 1/fitness
 
     def toPlot(self):
         x = []

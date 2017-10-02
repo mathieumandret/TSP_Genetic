@@ -79,7 +79,7 @@ class Population:
                 fit = self.cache_fitness[chemin]
             #Sinon l'ajouter au cache
             else:
-                fit = 1/cp.fitness()
+                fit = cp.fitness()
                 self.cache_fitness[chemin] = fit
             #Ajouter la fitness de l'objet courant au total
             self.totalFitness += fit
@@ -110,6 +110,17 @@ class Population:
         i -= 1
         return self.individus[i]
 
+    def selectionParTournoi(self, n):
+        """
+        A partir d'un echantillon aléatoire de n individus, selectionne le meilleur
+        """
+        #Selection de n membre de la population
+        participants = sample(self.individus, n)
+        #Recherche du meilleur participant
+        participants.sort(key=lambda x: x.fitness())
+        #Selection du meilleur participant
+        return participants[len(participants)-1]
+
     def evoluer(self, mut_freq):
         """
         Fait evoler la population vers une nouvelle generation,
@@ -123,7 +134,7 @@ class Population:
         #self.trierMeilleurs()
         #Pour chaque element de la population parente
         for i in range(len(self.individus)):
-            fils = self.selection().crossover(self.selection())
+            fils = self.selectionParTournoi(5).crossover(self.selectionParTournoi(5))
             r = randint(0, 100)
             if r < mut_freq:
                 fils.muter()
