@@ -21,7 +21,7 @@ class Population:
         #Pour recuperer la meilleure fitness, on doit être sur
         #que le premiere valeur qu'on evalueara sera inférieure a meilleurFitness
         #On pourrait utiliser math.inf disponible en 3.5
-        self.meilleurFitness = float('inf')
+        self.meilleurFitness = 0
         #Membre de la population de distance la plus courte, inexistant a l'initilisation
         self.meilleurChemin = None
         #generation de la population
@@ -72,20 +72,20 @@ class Population:
             #On doit donc rajouter la premiere ville à la fin de la liste au moment de l'evaluation pour avoir
             #une distance correcte, mais si on modifie le chemin, il ne pourra plus etre croisé avec un autre, puisqu'il
             #contiendra des doublons, on fait donc une copie a laquelle on rajoute la premier ville
-#            cp = deepcopy(chemin)
-#            cp.liste_villes.append(chemin[0])
+            cp = deepcopy(chemin)
+            cp.liste_villes.append(chemin[0])
             #Si la valeur de fitness existe dans le cache, la recuperer
             if chemin in self.cache_fitness:
                 fit = self.cache_fitness[chemin]
             #Sinon l'ajouter au cache
             else:
-                fit = chemin.fitness()
+                fit = 1/cp.fitness()
                 self.cache_fitness[chemin] = fit
             #Ajouter la fitness de l'objet courant au total
             self.totalFitness += fit
             #Si le chemin courant a une meilleure fitness que le record actuel
-            if fit < self.meilleurFitness:
-                self.meilleurChemin = chemin
+            if fit > self.meilleurFitness:
+                self.meilleurChemin = cp
                 self.meilleurFitness = fit
 
     def trierMeilleurs(self):

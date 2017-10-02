@@ -109,10 +109,10 @@ if options.graph:
     fig1, axarr = plt.subplots(2)
     plt.title('Generation: ' + str(p.generation) + ' Meilleur score: ' + str(p.meilleurFitness))
     #Affichage des points
-    axarr[0].scatter(x, y)
-    axarr[1].scatter(x, y)
+    axarr[0].scatter(x, y, color='red')
+    axarr[1].scatter(x, y, color='red')
     #Affichage des lignes
-    graph, = axarr[0].plot(x, y)
+    graph, = axarr[0].plot(x, y,)
     graph2, = axarr[1].plot(cx, cy)
     ani = FuncAnimation(fig1, animer, interval=20)
     plt.show()
