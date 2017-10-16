@@ -1,8 +1,6 @@
-
-
 from csv import reader
 from Ville import Ville
-from random import randint
+from random import randint, sample
 
 
 class Chemin:
@@ -37,9 +35,9 @@ class Chemin:
         with open(nom_fichier, 'r') as fichier:
             r = reader(fichier)
             for ligne in r:
-                coords.append(Ville(int(ligne[0]), int(ligne[1])))
+                coords.append(Ville(float(ligne[0]), float(ligne[1])))
         c = Chemin(0)
-        c.liste_villes = coords
+        c.liste_villes = sample(coords, len(coords))
         return c
 
     @classmethod
@@ -134,9 +132,13 @@ class Chemin:
             #Ajouter la distance entre les 2 points courant a la distance totale
             fitness += self.liste_villes[i].distanceTo(
                 self.liste_villes[i + 1])
-        return 1/fitness
+        return fitness
 
     def toPlot(self):
+        """
+        Retourne une liste de valeurs x et une liste de valeur y ordonnée,
+        correspondant au chemin
+        """
         x = []
         y = []
         for v in self.liste_villes:

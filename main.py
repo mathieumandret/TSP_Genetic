@@ -13,7 +13,6 @@ parser.add_option(
     '--graph',
     action='store_true',
     dest='graph',
-    default=False,
     help='Affiche un graphe des chemins')
 
 parser.add_option(
@@ -38,7 +37,7 @@ parser.add_option(
     '--mutation',
     action='store',
     dest='freq_mut',
-    default=10,
+    default=30,
     type='int',
     help='Frequence de mutation')
 
@@ -82,12 +81,16 @@ else:
 p.eval()
 #Recuperation du meilleur element
 best = p.meilleurChemin
-current = p.meilleurCourant
 #Coordonées du meilleur element
 x, y = best.toPlot()
-cx, cy = current.toPlot()
 
 limite = 0
+
+#Preparation du fichier de sortie
+benchmarkX = []
+benchmarkY = []
+
+img = 'cercle36p' + str(options.nbInds) + ' inds ' + str(options.freq_mut) + '%mut ' + str(options.nbGens) + 'gens'
 
 #Fonction d'animation du graphe
 def animer(i):
@@ -98,24 +101,32 @@ def animer(i):
         current = p.meilleurCourant
         plt.title('Generation: ' + str(p.generation) + ' Meilleur score: ' + str(p.meilleurFitness))
         nx, ny = best.toPlot()
-        ncx, ncy = current.toPlot()
         graph.set_data(nx, ny)
-        graph2.set_data(ncx, ncy)
+        benchmarkX.append(p.generation)
+        benchmarkY.append(p.meilleurFitness)
         limite += 1
 
 
 #Si on veut afficher le graphe
 if options.graph:
-    fig1, axarr = plt.subplots(2)
-    plt.title('Generation: ' + str(p.generation) + ' Meilleur score: ' + str(p.meilleurFitness))
+    fig1 = plt.figure()
+    plt.title('Generation: ' + str(p.generation) + '  Meilleur score: ' + str(p.meilleurFitness))
     #Affichage des points
-    axarr[0].scatter(x, y, color='red')
-    axarr[1].scatter(x, y, color='red')
+    plt.scatter(x, y, color='red')
     #Affichage des lignes
-    graph, = axarr[0].plot(x, y,)
-    graph2, = axarr[1].plot(cx, cy)
+    graph, = plt.plot(x, y)
+    #Enregistrement de l'evolution de la fitness en fonction des générations
+    benchmarkX.append(p.generation)
+    benchmarkY.append(p.meilleurFitness)
     ani = FuncAnimation(fig1, animer, interval=20)
     plt.show()
+    plt.close()
+    #Enregistrement des valeurs de benchmarks dans des images
+    plt.title('Distance en fonction de la génération\nIndividus=' + str(options.nbInds) + ' mutation: ' + str(options.freq_mut) + ' %')
+    plt.plot(benchmarkX, benchmarkY)
+    plt.xlabel('Génération')
+    plt.ylabel('Distance')
+    plt.savefig('benchmarks/' + img + '.png')
 
 else:
     for i in range(options.nbGens):
@@ -124,3 +135,4 @@ else:
         bestFitness = p.meilleurFitness
         print(p.generation)
         print(bestFitness)
+

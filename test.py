@@ -1,5 +1,6 @@
-from Population import Population
+#coding: utf-8
 
-p = Population(7,4)
-print(p.selectionParTournoi(5))
-print(p.selectionParTournoi(5).fitness())
+from Population import Population
+p = Population(5,10)
+print(p.selectionParRoulette())
+

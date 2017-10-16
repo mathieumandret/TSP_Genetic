@@ -2,6 +2,7 @@
 
 from Chemin import Chemin
 from random import sample, randint, uniform
+from math import inf
 from copy import deepcopy
 import pdb
 
@@ -21,7 +22,7 @@ class Population:
         #Pour recuperer la meilleure fitness, on doit être sur
         #que le premiere valeur qu'on evalueara sera inférieure a meilleurFitness
         #On pourrait utiliser math.inf disponible en 3.5
-        self.meilleurFitness = 0
+        self.meilleurFitness = inf
         #Membre de la population de distance la plus courte, inexistant a l'initilisation
         self.meilleurChemin = None
         #generation de la population
@@ -38,10 +39,6 @@ class Population:
             #On ajouter une permutation aléatoires de la carte a la population
             self.individus.append(
                 Chemin.fromArray(sample(carte.liste_villes, len(carte))))
-
-        #On veut associer a chaque chemin sa valeur de fitness pour ne pas avoir a la
-        #recalculer a chaque evaluation
-        self.cache_fitness = {}
         #Meilleur chemin de la generation courante
         self.meilleurCourant = None
 
@@ -63,9 +60,8 @@ class Population:
         Met a jour les valeur meilleurFitness et meilleurChemin
         """
         self.trierMeilleurs()
-        self.meilleurCourant = self.individus[0]
-        #Reinitialisation de la fitness total
-        self.totalFitness = 0
+        self.meilleurCourant = deepcopy(self.individus[len(self.individus)-1])
+        self.meilleurCourant.liste_villes.append(self.meilleurCourant.liste_villes[0])
         #Parcours de tous les chemins de la population
         for chemin in self.individus:
             #Les chemins reviennent tous a leur point de depart, mais on ne peut pas avoir de doublon dans un chemin
@@ -74,17 +70,10 @@ class Population:
             #contiendra des doublons, on fait donc une copie a laquelle on rajoute la premier ville
             cp = deepcopy(chemin)
             cp.liste_villes.append(chemin[0])
-            #Si la valeur de fitness existe dans le cache, la recuperer
-            if chemin in self.cache_fitness:
-                fit = self.cache_fitness[chemin]
-            #Sinon l'ajouter au cache
-            else:
-                fit = cp.fitness()
-                self.cache_fitness[chemin] = fit
-            #Ajouter la fitness de l'objet courant au total
-            self.totalFitness += fit
+            #TODO utiliser un cache pour les chemin connus
+            fit = cp.fitness()
             #Si le chemin courant a une meilleure fitness que le record actuel
-            if fit > self.meilleurFitness:
+            if fit < self.meilleurFitness:
                 self.meilleurChemin = cp
                 self.meilleurFitness = fit
 
@@ -95,20 +84,20 @@ class Population:
         #Tri avec pour cle la fonction fitness de Chemin
         self.individus.sort(key=lambda x: x.fitness())
 
-    def selection(self):
+    def selectionParRoulette(self):
         """
-        Selectionne un individus de la population en fonction de leur fitness
-        La fonction eval doit toujours avoir été appellée pour la génération courante
-        avant cette fonction
+        Utilise la selection par roulette pour generer n nouveau individus
         """
+        #Calcul de la fitness total
+        total = 0
         i = 0
-        #pdb.set_trace()
-        ran = uniform(0, self.totalFitness)
-        while (ran > 0):
-            ran -= self.cache_fitness[self.individus[i]]
-            i += 1
-        i -= 1
-        return self.individus[i]
+        for chemin in self.individus:
+            total += 1/chemin.fitness()
+        r = uniform(0,total) 
+        while(r > 0):
+            r -= 1/self.individus[i].fitness()
+            i+=1
+        return self.individus[i-1]
 
     def selectionParTournoi(self, n):
         """
@@ -118,12 +107,12 @@ class Population:
         participants = sample(self.individus, n)
         #Recherche du meilleur participant
         participants.sort(key=lambda x: x.fitness())
-        #Selection du meilleur participant
-        return participants[len(participants)-1]
+        #Selection du meilleur participant, qui a donc la plus petite valeur de fitness
+        return participants[0]
 
     def evoluer(self, mut_freq):
         """
-        Fait evoler la population vers une nouvelle generation,
+        Fait evoluer la population vers une nouvelle generation,
         avec un taux de mutation de mut_freq
         """
         #tableau qui contiendra les fils de individus
@@ -142,3 +131,27 @@ class Population:
         #Remplacer l'ancienne population par la nouvelle
         self.individus = nouvelle_pop
         self.generation += 1
+
+    def evoluerGarderParent(self, echant, mut_freq):
+        """
+        Fait evoluer la population courante en conservant les parents dans la selection
+        """
+        self.eval()
+        tournoi = []
+        nouvelle_pop = []
+        #Prendre echant parents
+        for i in range(echant):
+            tournoi.append(self.selectionParRoulette())
+        #Les croiser pour générer le même nombre d'enfants
+        for i in range(echant):
+            tournoi.append(tournoi[i].crossover(tournoi[i+1]))
+        tournoi.append(tournoi[0].crossover(tournoi[1]))
+        #Parmi cette selection, prendre les meilleurs
+        tournoi.sort(key= lambda x: x.fitness())
+        for i in range(echant):
+            nouvelle_pop.append(tournoi[i])
+        #Remplacement de la population
+        self.individus = nouvelle_pop
+        self.generation += 1
+
+
