@@ -3,7 +3,6 @@
 from Chemin import Chemin
 from random import sample, randint, uniform
 from math import inf
-from copy import deepcopy
 import pdb
 
 
@@ -39,9 +38,8 @@ class Population:
             #On ajouter une permutation aléatoires de la carte a la population
             self.individus.append(
                 Chemin.fromArray(sample(carte.liste_villes, len(carte))))
-        #Meilleur chemin de la generation courante
-        self.meilleurCourant = None
-
+        #Evaluation de la population
+        self.eval()
 
     def __repr__(self):
         """
@@ -59,23 +57,15 @@ class Population:
         """
         Met a jour les valeur meilleurFitness et meilleurChemin
         """
-        self.trierMeilleurs()
-        self.meilleurCourant = deepcopy(self.individus[len(self.individus)-1])
-        self.meilleurCourant.liste_villes.append(self.meilleurCourant.liste_villes[0])
         #Parcours de tous les chemins de la population
         for chemin in self.individus:
-            #Les chemins reviennent tous a leur point de depart, mais on ne peut pas avoir de doublon dans un chemin
-            #On doit donc rajouter la premiere ville à la fin de la liste au moment de l'evaluation pour avoir
-            #une distance correcte, mais si on modifie le chemin, il ne pourra plus etre croisé avec un autre, puisqu'il
-            #contiendra des doublons, on fait donc une copie a laquelle on rajoute la premier ville
-            cp = deepcopy(chemin)
-            cp.liste_villes.append(chemin[0])
             #TODO utiliser un cache pour les chemin connus
-            fit = cp.fitness()
+            ferme = chemin.liste_villes + chemin.liste_villes[-1:]
+            fit = Chemin.fromArray(ferme).fitness() 
             #Si le chemin courant a une meilleure fitness que le record actuel
             if fit < self.meilleurFitness:
-                self.meilleurChemin = cp
-                self.meilleurFitness = fit
+                self.meilleurChemin = Chemin.fromArray(ferme)
+                self.meilleurFitness = fit  
 
     def trierMeilleurs(self):
         """
@@ -117,19 +107,18 @@ class Population:
         """
         #tableau qui contiendra les fils de individus
         nouvelle_pop = []
-        #Evaluation de la population
-        self.eval()
         #Tri avec les meilleurs individus en premier
         #self.trierMeilleurs()
         #Pour chaque element de la population parente
         for i in range(len(self.individus)):
-            fils = self.selectionParTournoi(5).crossover(self.selectionParTournoi(5))
+            fils = self.selectionParTournoi(10).crossover(self.selectionParTournoi(10))
             r = randint(0, 100)
             if r < mut_freq:
                 fils.muter()
             nouvelle_pop.append(fils)
         #Remplacer l'ancienne population par la nouvelle
         self.individus = nouvelle_pop
+        self.eval()
         self.generation += 1
 
     def evoluerGarderParent(self, echant, mut_freq):

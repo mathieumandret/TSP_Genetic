@@ -98,7 +98,6 @@ def animer(i):
     if limite < options.nbGens:
         p.evoluer(options.freq_mut)
         best = p.meilleurChemin
-        current = p.meilleurCourant
         plt.title('Generation: ' + str(p.generation) + ' Meilleur score: ' + str(p.meilleurFitness))
         nx, ny = best.toPlot()
         graph.set_data(nx, ny)
@@ -132,6 +131,7 @@ else:
     for i in range(options.nbGens):
         p.evoluer(options.freq_mut)
         best = p.meilleurChemin
+        print(best)
         bestFitness = p.meilleurFitness
         print(p.generation)
         print(bestFitness)
