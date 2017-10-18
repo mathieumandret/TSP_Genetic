@@ -45,12 +45,8 @@ class TestChemin(unittest.TestCase):
         self.assertEqual(self.c.to_plot(), (x, y))
 
     def test_muter(self):
-        c = Chemin.from_array([Ville(1, 1), Ville(2, 2)])
-        c.muter()
-        self.assertEqual(c.liste_villes, [Ville(2, 2), Ville(1, 1)])
         copie = copy.deepcopy(self.c)
-
-
+        self.assertNotEqual(self.c, copie)
 
 if __name__ == '__main__':
     unittest.main()
