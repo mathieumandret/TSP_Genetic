@@ -1,7 +1,8 @@
-#coding: utf-8
+# coding: utf-8
 
-#Fonction pour calculer la distance etre 2 coordonnées
+# Fonction pour calculer la distance etre 2 coordonnées
 from math import hypot
+
 
 class Ville:
     """
@@ -22,7 +23,7 @@ class Ville:
         """
         return "(" + str(self.x) + ";" + str(self.y) + ")"
 
-    def distanceTo(self, other):
+    def distance_to(self, other):
         """
         Retourne la distance entre cette ville et un autre
         """
@@ -40,7 +41,6 @@ class Ville:
         else:
             return self.x == other.x and self.y == other.y
 
-
     def __ne__(self, other):
         """
         Permet de comparer 2 villes
@@ -54,5 +54,5 @@ class Ville:
         """
         Hache la ville, permet de la stocker dans set()
         """
-        #Hacher la représentation en string, qui contient x et y
+        # Hacher la représentation en string, qui contient x et y
         return hash(self.__repr__())

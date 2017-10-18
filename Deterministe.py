@@ -11,7 +11,7 @@ with open('coords.csv', 'r') as f:
     r = reader(f)
     for x in r:
         coords.append(Ville(int(x[0]), int(x[1])))
-carte = Chemin.fromArray(coords)
+carte = Chemin.from_array(coords)
 
 chemins = []
 
@@ -30,7 +30,7 @@ def toPlot(c):
 
 #Generation de tout les chemins possibles
 for perm in (permutations(carte)):
-    chemins.append(Chemin.fromArray(list(perm)))
+    chemins.append(Chemin.from_array(list(perm)))
 
 for chemin in chemins:
     chemin.liste_villes.append(chemin.liste_villes[0])

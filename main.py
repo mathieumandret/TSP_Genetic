@@ -1,11 +1,11 @@
-#coding: utf-8
+# coding: utf-8
 
 from Population import Population
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import optparse
 
-#Gestionnaire de parametres
+# Gestionnaire de parametres
 parser = optparse.OptionParser()
 
 parser.add_option(
@@ -60,67 +60,71 @@ parser.add_option(
     type='int',
     help='Nombre de generations')
 
-#Recuperation des parametres
+# Recuperation des parametres
 options, a = parser.parse_args()
 
-#Gestion des options incompatibles
-#Si on fourni un fichier csv, on ne peut pas choisir le nombre de villes
-if options.nbVilles != 20 and options.fichier_csv != None:
+# Gestion des options incompatibles
+# Si on fourni un fichier csv, on ne peut pas choisir le nombre de villes
+if options.nbVilles != 20 and options.fichier_csv is not None:
     print(
         'Vous ne pouvez pas choisir le nombre de villes si vous charger un fichier csv'
     )
     quit()
 
-#Si on a specifie un fichier, charger la carte a partir de celui-ci
-if options.fichier_csv != None:
+# Si on a specifie un fichier, charger la carte a partir de celui-ci
+if options.fichier_csv is not None:
     p = Population(options.nbInds, 0, options.fichier_csv)
-#Sinon, generer les villes aléatoirement
+# Sinon, generer les villes aléatoirement
 else:
     p = Population(options.nbInds, options.nbVilles)
-#Evaluation initiale de la population
+# Evaluation initiale de la population
 p.eval()
-#Recuperation du meilleur element
+# Recuperation du meilleur element
 best = p.meilleurChemin
-#Coordonées du meilleur element
-x, y = best.toPlot()
+# Coordonées du meilleur element
+x, y = best.to_plot()
 
 limite = 0
 
-#Preparation du fichier de sortie
+# Preparation du fichier de sortie
 benchmarkX = []
 benchmarkY = []
 
 img = 'cercle36p' + str(options.nbInds) + ' inds ' + str(options.freq_mut) + '%mut ' + str(options.nbGens) + 'gens'
 
-#Fonction d'animation du graphe
+# Fonction d'animation du graphe
+
+
 def animer(i):
     global limite
     if limite < options.nbGens:
         p.evoluer(options.freq_mut)
         best = p.meilleurChemin
         plt.title('Generation: ' + str(p.generation) + ' Meilleur score: ' + str(p.meilleurFitness))
-        nx, ny = best.toPlot()
+        nx, ny = best.to_plot()
         graph.set_data(nx, ny)
         benchmarkX.append(p.generation)
         benchmarkY.append(p.meilleurFitness)
         limite += 1
 
 
-#Si on veut afficher le graphe
+# Si on veut afficher le graphe
 if options.graph:
     fig1 = plt.figure()
+    # Aspect circulaire de la figure
+    plt.axes().set_aspect('equal', 'datalim')
     plt.title('Generation: ' + str(p.generation) + '  Meilleur score: ' + str(p.meilleurFitness))
-    #Affichage des points
+    # Affichage des points
     plt.scatter(x, y, color='red')
-    #Affichage des lignes
+    # Affichage des lignes
     graph, = plt.plot(x, y)
-    #Enregistrement de l'evolution de la fitness en fonction des générations
+    # Enregistrement de l'evolution de la fitness en fonction des générations
     benchmarkX.append(p.generation)
     benchmarkY.append(p.meilleurFitness)
     ani = FuncAnimation(fig1, animer, interval=20)
     plt.show()
     plt.close()
-    #Enregistrement des valeurs de benchmarks dans des images
+    # Enregistrement des valeurs de benchmarks dans des images
     plt.title('Distance en fonction de la génération\nIndividus=' + str(options.nbInds) + ' mutation: ' + str(options.freq_mut) + ' %')
     plt.plot(benchmarkX, benchmarkY)
     plt.xlabel('Génération')
@@ -135,4 +139,3 @@ else:
         bestFitness = p.meilleurFitness
         print(p.generation)
         print(bestFitness)
-
