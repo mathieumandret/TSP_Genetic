@@ -44,9 +44,22 @@ class TestChemin(unittest.TestCase):
         y = [2, 3, 4, 5]
         self.assertEqual(self.c.to_plot(), (x, y))
 
-    def test_muter(self):
-        copie = copy.deepcopy(self.c)
-        self.assertNotEqual(self.c, copie)
+    def test_fermeture(self):
+        self.assertEqual(
+            [Ville(1, 2),
+             Ville(1, 3),
+             Ville(1, 4),
+             Ville(1, 5),
+             Ville(1, 2)], self.c.fermeture().liste_villes)
+
+    def test_crossover(self):
+        c2 = Chemin(len(self.c))
+        fils = self.c.crossover(c2)
+        self.assertTrue(True)
+        for ville in fils:
+            if ville not in c2 and ville not in self.c:
+                self.assertTrue(False)
+
 
 if __name__ == '__main__':
     unittest.main()

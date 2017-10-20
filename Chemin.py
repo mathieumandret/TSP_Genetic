@@ -157,6 +157,14 @@ class Chemin:
 
     def fermeture(self):
         """
-        Retourne le chemin auquel est ajouté sa première ville en derniere position
+        Retourne le chemin auquel est ajouté sa première
+        ville en derniere position
         """
         return Chemin.from_array(self.liste_villes + self.liste_villes[:1])
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        if other is None:
+            return False
+        return self.liste_villes == other.liste_villes
