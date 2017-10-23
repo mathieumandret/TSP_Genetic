@@ -1,8 +1,9 @@
 # coding: utf-8
 
 from Chemin import Chemin
-from random import sample, randint, uniform
+from random import sample, randint, uniform, shuffle
 from math import inf
+from itertools import permutations
 
 
 class Population:
@@ -29,8 +30,9 @@ class Population:
         else:
             # Creation de la carte, qui est un chemin dont l'ordre n'importe pas, il sert de base a la
             carte = Chemin(nb_villes)
-        # La carte est aussi un chemin valide, l'ajouter
+        # La carte est aussi un chemin valide, l'ajouter en la melangeant
         # self.individus.append(Chemin.fromArray(carte))
+        shuffle(carte)
         self.individus.append(carte)
         # Tant qu'on a pas atteint le nombre d'individus cible
         while len(self.individus) < nb_individus:
@@ -77,12 +79,12 @@ class Population:
         total = 0
         i = 0
         for chemin in self.individus:
-            total += 1/chemin.fitness()
+            total += 1 / chemin.fitness()
         r = uniform(0, total)
-        while(r > 0):
-            r -= 1/self.individus[i].fitness()
+        while (r > 0):
+            r -= 1 / self.individus[i].fitness()
             i += 1
-        return self.individus[i-1]
+        return self.individus[i - 1]
 
     def selection_par_tournoi(self, n):
         """
@@ -105,7 +107,8 @@ class Population:
         # Tri avec les meilleurs individus en premier
         # Pour chaque element de la population parente
         for i in range(len(self.individus)):
-            fils = self.selection_par_tournoi(10).crossover(self.selection_par_tournoi(10))
+            fils = self.selection_par_tournoi(10).crossover(
+                self.selection_par_tournoi(10))
             r = randint(0, 100)
             if r < mut_freq:
                 fils.muter()
@@ -127,7 +130,7 @@ class Population:
             tournoi.append(self.selection_par_roulette())
         # Les croiser pour générer le même nombre d'enfants
         for i in range(echant):
-            tournoi.append(tournoi[i].crossover(tournoi[i+1]))
+            tournoi.append(tournoi[i].crossover(tournoi[i + 1]))
         tournoi.append(tournoi[0].crossover(tournoi[1]))
         # Parmi cette selection, prendre les meilleurs
         tournoi.sort(key=lambda x: x.fitness())
@@ -136,3 +139,19 @@ class Population:
         # Remplacement de la population
         self.individus = nouvelle_pop
         self.generation += 1
+
+    @classmethod
+    def gen_deter(cls, carte):
+        """
+        Cette méthode ne doit être utilisée qu'a but de test
+        Elle permet de generer toutes les permutations possibles
+        depuis un chemin
+        """
+        # Population vide
+        p = Population(0, 0)
+        # Retirer la carte de la population
+        p.individus.clear()
+        # Liste de toutes les permutations de la carte
+        for perm in permutations(carte):
+            p.individus.append(Chemin.from_array(list(perm)))
+        return p

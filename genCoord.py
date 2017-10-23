@@ -28,5 +28,3 @@ for i in range(n):
 with open(dest,'w') as f:
     writer = csv.writer(f)
     writer.writerows(coords)
-
-

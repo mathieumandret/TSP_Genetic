@@ -45,3 +45,6 @@ plt.scatter(x,y)
 plt.plot(x,y)
 plt.show()
 
+print(best)
+print(score)
+

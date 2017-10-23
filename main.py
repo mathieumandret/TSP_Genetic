@@ -46,7 +46,7 @@ parser.add_option(
     '--individus',
     action='store',
     dest='nbInds',
-    default=7,
+    default=50,
     type='int',
     help='Nombre d\'individus dans la population')
 

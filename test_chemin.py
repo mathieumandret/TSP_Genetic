@@ -60,6 +60,15 @@ class TestChemin(unittest.TestCase):
             if ville not in c2 and ville not in self.c:
                 self.assertTrue(False)
 
+    def test_eq(self):
+        self.assertEqual(self.c,
+                         Chemin.from_array([
+                             Ville(1, 2),
+                             Ville(1, 3),
+                             Ville(1, 4),
+                             Ville(1, 5)
+                         ]))
+
 
 if __name__ == '__main__':
     unittest.main()
