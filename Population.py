@@ -19,26 +19,33 @@ class Population:
         self.generation = 1
         self.individus = []
         # Pour recuperer la meilleure fitness, on doit être sur
-        # que le premiere valeur qu'on evalueara sera inférieure a meilleurFitness
-        # On pourrait utiliser math.inf disponible en 3.5
+        # que le premiere valeur qu'on evalueara sera inférieure
+        # a meilleurFitness
         self.meilleurFitness = inf
-        # Membre de la population de distance la plus courte, inexistant a l'initilisation
+        # Membre de la population de distance la plus courte, inexistant a
+        # l'initilisation
         self.meilleurChemin = None
+        # Permet de creer une population vide
+        if nb_individus == 0:
+            return
         # generation de la population
         if csv is not None:
             carte = Chemin.from_csv(csv)
         else:
-            # Creation de la carte, qui est un chemin dont l'ordre n'importe pas, il sert de base a la
+            # Creation de la carte, qui est un chemin dont l'ordre n'importe
+            # pas, il sert de base a la
             carte = Chemin(nb_villes)
-        # La carte est aussi un chemin valide, l'ajouter en la melangeant
-        # self.individus.append(Chemin.fromArray(carte))
+        # Melanger la carte
         shuffle(carte)
         self.individus.append(carte)
         # Tant qu'on a pas atteint le nombre d'individus cible
         while len(self.individus) < nb_individus:
-            # On ajouter une permutation aléatoires de la carte a la population
-            self.individus.append(
-                Chemin.from_array(sample(carte.liste_villes, len(carte))))
+            # On choisit une permutation aléatoire de la carte
+            perm = Chemin.from_array(sample(carte.liste_villes, len(carte)))
+            # Si elle n'est pas déjà présente dans la population
+            # on l'y ajoute.
+            if perm not in self.individus:
+                self.individus.append(perm)
         # Evaluation de la population
         self.eval()
 
@@ -46,7 +53,10 @@ class Population:
         """
         Retourne une représentation textuelle de la population
         """
-        return str(self.meilleurFitness)
+        rep = ""
+        for chemin in self.individus:
+            rep += chemin.__repr__() + '\n'
+        return rep
 
     def __len__(self):
         """
@@ -79,22 +89,24 @@ class Population:
         total = 0
         i = 0
         for chemin in self.individus:
-            total += 1 / chemin.fitness()
+            total += chemin.fitness()
         r = uniform(0, total)
         while (r > 0):
-            r -= 1 / self.individus[i].fitness()
+            r -= self.individus[i].fitness()
             i += 1
         return self.individus[i - 1]
 
     def selection_par_tournoi(self, n):
         """
-        A partir d'un echantillon aléatoire de n individus, selectionne le meilleur
+        A partir d'un echantillon aléatoire de n individus,
+        selectionne le meilleur
         """
         # Selection de n membre de la population
         participants = sample(self.individus, n)
         # Recherche du meilleur participant
         participants.sort(key=lambda x: x.fitness())
-        # Selection du meilleur participant, qui a donc la plus petite valeur de fitness
+        # Selection du meilleur participant, qui a donc la plus petite valeur
+        # de fitness
         return participants[0]
 
     def evoluer(self, mut_freq):
@@ -104,7 +116,6 @@ class Population:
         """
         # tableau qui contiendra les fils de individus
         nouvelle_pop = []
-        # Tri avec les meilleurs individus en premier
         # Pour chaque element de la population parente
         for i in range(len(self.individus)):
             fils = self.selection_par_tournoi(10).crossover(
@@ -118,26 +129,27 @@ class Population:
         self.eval()
         self.generation += 1
 
-    def evoluer_garder_parent(self, echant, mut_freq):
+    def evoluer_garder_parent(self, pourcent_parent, mut_freq):
         """
-        Fait evoluer la population courante en conservant les parents dans la selection
+        Fait evoluer la population en gardant une portion
+        des parents
         """
-        self.eval()
-        tournoi = []
         nouvelle_pop = []
-        # Prendre echant parents
-        for i in range(echant):
-            tournoi.append(self.selection_par_roulette())
-        # Les croiser pour générer le même nombre d'enfants
-        for i in range(echant):
-            tournoi.append(tournoi[i].crossover(tournoi[i + 1]))
-        tournoi.append(tournoi[0].crossover(tournoi[1]))
-        # Parmi cette selection, prendre les meilleurs
-        tournoi.sort(key=lambda x: x.fitness())
-        for i in range(echant):
-            nouvelle_pop.append(tournoi[i])
-        # Remplacement de la population
+        # Ajouter les meilleur parents a la nouvelle population
+        self.individus.sort(key=lambda x: x.fitness())
+        nb_parents = int(len(self.individus) * (pourcent_parent / 100))
+        nouvelle_pop += self.individus[:nb_parents]
+        # Remplir le reste avec des fils
+        for i in range(len(self.individus) - nb_parents):
+            p1 = self.selection_par_tournoi(20)
+            p2 = self.selection_par_tournoi(20)
+            fils = p1.crossover(p2)
+            r = randint(0, 100)
+            if mut_freq > r:
+                fils.muter()
+            nouvelle_pop.append(fils)
         self.individus = nouvelle_pop
+        self.eval()
         self.generation += 1
 
     @classmethod
@@ -149,9 +161,9 @@ class Population:
         """
         # Population vide
         p = Population(0, 0)
-        # Retirer la carte de la population
-        p.individus.clear()
+        carte = Chemin.from_csv("test_coords.csv")
         # Liste de toutes les permutations de la carte
         for perm in permutations(carte):
             p.individus.append(Chemin.from_array(list(perm)))
+        p.eval()
         return p

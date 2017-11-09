@@ -39,7 +39,7 @@ class Chemin:
             for ligne in r:
                 coords.append(Ville(float(ligne[0]), float(ligne[1])))
         c = Chemin(0)
-        c.liste_villes = sample(coords, len(coords))
+        c.liste_villes = coords
         return c
 
     @classmethod

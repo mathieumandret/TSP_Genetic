@@ -34,9 +34,6 @@ class TestVille(unittest.TestCase):
         self.assertEqual(self.v, v2)
         self.assertNotEqual(self.v, v3)
 
-    def test_suite():
-        suite = unittest.TestSuite()
-        suite.addTest(TestVille('test_eq'))
 
 if __name__ == '__main__':
     unittest.main()
