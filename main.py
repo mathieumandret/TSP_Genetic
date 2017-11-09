@@ -22,9 +22,9 @@ def animer(i):
 
 
 # Paramètres des populations
-NBINDIVIDUS = 20
-MUT_1 = 15
-NB_GENS = 10
+NBINDIVIDUS = 50
+MUT_1 = 5
+NB_GENS = 1000
 # Création de 2 populations identiques de 100 individus
 p1 = Population(NBINDIVIDUS, 0, args.carte)
 init_dist = p1.meilleurFitness
@@ -43,5 +43,3 @@ ani = FuncAnimation(fi, animer, interval=10, repeat=False, frames=NB_GENS - 2)
 plt.show()
 plt.close()
 end_dist = p1.meilleurFitness
-print(init_dist)
-print(end_dist)
