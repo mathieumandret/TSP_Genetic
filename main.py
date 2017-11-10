@@ -46,7 +46,7 @@ def benchmark(pct_impr):
         elitisme,
         pct_impr)
 
-    with open('data.txt', 'a') as f:
+    with open('data.csv', 'a') as f:
         f.write(opts)
 
 
