@@ -46,6 +46,8 @@ class Population:
             # on l'y ajoute.
             if perm not in self.individus:
                 self.individus.append(perm)
+        # Dictionnaire qui à chaque chemin associe sa longueur
+        self.cache = {}
         # Evaluation de la population
         self.eval()
 
@@ -69,7 +71,15 @@ class Population:
         Met a jour les valeur meilleurFitness et meilleurChemin
         """
         for chemin in self.individus:
-            fit = chemin.fermeture().fitness()
+            # Si le chemin existe dans le cache,
+            # on connait déjà sa longueur
+            if chemin in self.cache.keys():
+                fit = self.cache[chemin]
+            else:
+                # Sinon on doit la calculer
+                fit = chemin.fermeture().fitness()
+                # Et le mettre dans le cache
+                self.cache[chemin] = fit
             if fit < self.meilleurFitness:
                 self.meilleurChemin = chemin.fermeture()
                 self.meilleurFitness = fit

@@ -168,3 +168,11 @@ class Chemin:
         if other is None:
             return False
         return self.liste_villes == other.liste_villes
+
+    def __hash__(self):
+        """
+        Permet de hasher un objet chemin
+        et donc de l'utiliser comme clé dans un
+        dictionnaire
+        """
+        return hash(self.__repr__())
