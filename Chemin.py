@@ -2,7 +2,7 @@
 
 from csv import reader
 from Ville import Ville
-from random import randint, sample
+from random import randint
 
 
 class Chemin:
@@ -148,7 +148,7 @@ class Chemin:
             y.append(v.y)
         return x, y
 
-    def muter(self):
+    def muter_swap(self):
         """
         Echange aléatoirement la position de 2 villes dans le chemin
         """

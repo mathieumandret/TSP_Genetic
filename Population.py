@@ -122,7 +122,7 @@ class Population:
                 self.selection_par_tournoi(10))
             r = randint(0, 100)
             if r < mut_freq:
-                fils.muter()
+                fils.muter_swap()
             nouvelle_pop.append(fils)
         # Remplacer l'ancienne population par la nouvelle
         self.individus = nouvelle_pop
@@ -146,7 +146,25 @@ class Population:
             fils = p1.crossover(p2)
             r = randint(0, 100)
             if mut_freq > r:
-                fils.muter()
+                fils.muter_swap()
+            nouvelle_pop.append(fils)
+        self.individus = nouvelle_pop
+        self.eval()
+        self.generation += 1
+
+    def evoluer_roulette(self, mut_freq):
+        """
+        Fait evoluer la population en selectionnant les parents
+        par roulette
+        """
+        nouvelle_pop = []
+        for i in range(len(self.individus)):
+            p1 = self.selection_par_roulette()
+            p2 = self.selection_par_roulette()
+            fils = p1.crossover(p2)
+            r = randint(0, 100)
+            if mut_freq > r:
+                fils.muter_swap()
             nouvelle_pop.append(fils)
         self.individus = nouvelle_pop
         self.eval()

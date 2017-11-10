@@ -1,7 +1,5 @@
 # coding: utf-8
-
 import unittest
-import copy
 
 from Ville import Ville
 from Chemin import Chemin
