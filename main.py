@@ -18,12 +18,14 @@ parser.add_option('-m', '--mutation', action='store',
 parser.add_option('-g', '--generation', action='store',
                   dest='nb_gens', default=100, type='int',
                   help='nombre de générations')
-parser.add_option('-t', '--tournoi', action='store_true', dest='sel_tournoi',
-                  help='utiliser la méthode de selection par tournoi')
-parser.add_option('-r', '--roulette', action='store_true', dest='sel_roulette',
-                  help='utiliser la méthode de selection par roulette')
+parser.add_option('-s', '--selection', action='store',
+                  dest='selection',
+                  default='tournoi',
+                  help='methode de selection des parents')
 parser.add_option('-e', '--elitisme', action='store_true', dest='elitisme',
                   help='garder les meilleurs parents à chaque génération')
+parser.add_option('-b', '--benchmark', action='store_true', dest='benchmark',
+                  help='enregistre les resulats en fonction des paramètres')
 
 options, args = parser.parse_args()
 
@@ -34,7 +36,6 @@ def benchmark(pct_impr):
     en fonction des paramètres courants
     dans un fichier
     """
-    selection = 1 if options.sel_tournoi else 2
     elitisme = 1 if options.elitisme else 0
     # Formattages: nombre d'individus, nombre de generation, taux de mutation,
     # methode de selection, elitisme, pourcentage d'amélioration
@@ -42,7 +43,7 @@ def benchmark(pct_impr):
         options.nb_inds,
         options.nb_gens,
         options.mut_rate,
-        selection,
+        options.selection,
         elitisme,
         pct_impr)
 
@@ -54,12 +55,17 @@ def animer(i):
     """
     Met à jour le graphe du meilleur chemin de chaque population
     """
-    if options.sel_roulette:
-        p1.evoluer_roulette(options.mut_rate)
-    elif options.elitisme:
-        p1.evoluer_garder_parent(10, options.mut_rate)
+    if options.selection == 'tournoi':
+        if options.elitisme:
+            p1.evoluer_tournoi_garder_parent(10, options.mut_rate)
+        else:
+            p1.evoluer_tournoi(options.mut_rate)
     else:
-        p1.evoluer(options.mut_rate)
+        if options.elitisme:
+            p1.evoluer_roulette_garder_parent(10, options.mut_rate)
+        else:
+            p1.evoluer_tournoi(options.mut_rate)
+
     nx1, ny1 = p1.meilleurChemin.to_plot()
     plt.title('Génération: ' + str(p1.generation))
     graph1.set_data(nx1, ny1)
@@ -78,5 +84,6 @@ ani = FuncAnimation(fi, animer, interval=10, repeat=False,
 plt.show()
 plt.close()
 end_dist = p1.meilleurFitness
-pct_impr = round(end_dist / init_dist * 100, 2)
+if options.benchmark:
+    pct_impr = round(end_dist / init_dist * 100, 2)
 benchmark(pct_impr)
