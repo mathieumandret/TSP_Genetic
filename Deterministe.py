@@ -28,7 +28,7 @@ def toPlot(c):
     return x, y
 
 
-#Generation de tout les chemins possibles
+# Generation de tout les chemins possibles
 for perm in (permutations(carte)):
     chemins.append(Chemin.from_array(list(perm)))
 
@@ -38,13 +38,12 @@ for chemin in chemins:
     if fit < score:
         score = fit
         best = chemin
-x,y = toPlot(best)
+x, y = toPlot(best)
 
 fig = plt.figure()
-plt.scatter(x,y)
-plt.plot(x,y)
+plt.scatter(x, y)
+plt.plot(x, y)
 plt.show()
 
 print(best)
 print(score)
-

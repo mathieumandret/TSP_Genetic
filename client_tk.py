@@ -18,7 +18,8 @@ class ClientTK(tk.Tk):
         self.cb_benchmark = tk.Checkbutton(
             self, variable=self.keep_benchmark, text="Enregistrer les données")
         # Labels
-        self.l_title = tk.Label(self, text="Choisir les paramètres")
+        self.l_title = tk.Label(
+            self, text="Choisir les paramètres:", font=("Source Code Pro", 12))
         self.l_nbinds = tk.Label(self, text="Nombre d'individus")
         self.l_mut = tk.Label(self, text="Fréquence mutation")
         self.l_gen = tk.Label(self, text="Générations")
@@ -26,6 +27,7 @@ class ClientTK(tk.Tk):
         self.l_mut_meth = tk.Label(self, text="Méthode de mutation")
         self.l_carte = tk.Label(self, text="Carte")
         self.l_result = tk.Label(self)
+        self.l_result_num = tk.Label(self)
         # Text fields
         self.f_nbinds = tk.Entry(self)
         self.f_mut = tk.Entry(self)
@@ -56,13 +58,13 @@ class ClientTK(tk.Tk):
         """
         Organise tous les éléments sur la fenetre
         """
-        self.l_title.grid(row=0, column=1)
+        self.l_title.grid(row=0, column=0, pady=10, padx=5)
         self.l_nbinds.grid(row=1, column=0)
-        self.f_nbinds.grid(row=1, column=1)
+        self.f_nbinds.grid(row=1, column=1, padx=3)
         self.l_mut.grid(row=2, column=0)
-        self.f_mut.grid(row=2, column=1)
+        self.f_mut.grid(row=2, column=1, padx=3)
         self.l_gen.grid(row=3, column=0)
-        self.f_gen.grid(row=3, column=1)
+        self.f_gen.grid(row=3, column=1, padx=3)
         self.l_meth.grid(row=4, column=0)
         self.menu_meth.grid(row=4, column=1)
         self.l_mut_meth.grid(row=5, column=0)
@@ -70,10 +72,11 @@ class ClientTK(tk.Tk):
         self.l_carte.grid(row=6, column=0)
         self.btn_carte.grid(row=6, column=1)
         self.cb_elitism.grid(row=7, column=0)
-        self.cb_benchmark.grid(row=7, column=1)
+        self.cb_benchmark.grid(row=7, column=1, padx=3)
         self.btn_go.grid(row=8, column=0, pady=5)
         self.btn_exit.grid(row=8, column=1, pady=5)
-        self.l_result.grid(row=9, column=0)
+        self.l_result.grid(row=9, column=0, pady=3, padx=3)
+        self.l_result_num.grid(row=9, column=1, pady=3, padx=3)
 
     def animer(self, i):
         """
@@ -82,7 +85,10 @@ class ClientTK(tk.Tk):
         # Evolution en fonction des paramètres
         elitism = True if self.elitism == 1 else False
         self.p1.evoluer(int(self.f_mut.get()),
-                        self.select_meth.get(), self.select_mut.get(), elitism, 5)
+                        self.select_meth.get(),
+                        self.select_mut.get(),
+                        elitism,
+                        5)
         nx1, ny1 = self.p1.meilleurChemin.to_plot()
         plt.title('Génération: ' + str(self.p1.generation))
         self.graph1.set_data(nx1, ny1)
@@ -94,7 +100,9 @@ class ClientTK(tk.Tk):
             self.pct_imp = round((1 - (curr_best / self.init_dist)) * 100, 2)
             # L'afficher
             self.l_result.config(
-                text="Taux d'amélioration: " + str(self.pct_imp) + '%')
+                text="Taux d'amélioration: ")
+            self.l_result_num.config(
+                text=str(self.pct_imp) + '%')
             if self.keep_benchmark.get() == 1:
                 self.benchmark()
 

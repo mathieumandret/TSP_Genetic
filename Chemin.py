@@ -85,12 +85,14 @@ class Chemin:
         """
         Croise le chemin courant et un autre pour retourner 2 chemins fils
         """
-        # Il faut que les 2 parents soient de la même taille, et que other soit du type Chemin
+        # Il faut que les 2 parents soient de la même taille, et que other soit
+        # du type Chemin
         if not isinstance(other, self.__class__):
             raise ValueError('On ne peut croiser que 2 chemins')
         # Fils en forme canonique
         fils = [None] * len(self)
-        # Selection aléatoire de 2 points points de découpe de 0 a longueur parent
+        # Selection aléatoire de 2 points points de découpe de 0 a longueur
+        # parent
         debut, fin = randint(0, len(self)), randint(0, len(self))
 
         # Si debut est strictement inférieur à fin, on peut traiter les fils
@@ -106,13 +108,15 @@ class Chemin:
                 fils[i] = other[i]
 
         # Si les 2 points sont égaux(ce qui est peut probable pour un nombre de villes elevé, ne rien faire et laisser les fils tels quels
-        # A ce point, il reste de "trous" (None) dans le fils, il faut les combler
+        # A ce point, il reste de "trous" (None) dans le fils, il faut les
+        # combler
 
         # Pour chaque element du parent
         for el in self:
             # Si l'element courant n'est pas déjà dans le fils
             if el not in fils:
-                # On parcours toutes les cases du fils a la recherche du premier trou
+                # On parcours toutes les cases du fils a la recherche du
+                # premier trou
                 for j in range(len(fils)):
                     # Quand le trou est trouvé
                     if fils[j] is None:
@@ -131,7 +135,8 @@ class Chemin:
         fitness = 0
         # Parcours de la premiere a l'avant derniere ville du chemin
         for i in range(len(self) - 1):
-            # Ajouter la distance entre les 2 points courant a la distance totale
+            # Ajouter la distance entre les 2 points courant a la distance
+            # totale
             fitness += self.liste_villes[i].distance_to(
                 self.liste_villes[i + 1])
         return fitness

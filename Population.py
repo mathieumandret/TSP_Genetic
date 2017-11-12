@@ -119,84 +119,8 @@ class Population:
         # de fitness
         return participants[0]
 
-    def evoluer_tournoi(self, mut_freq):
-        """
-        Fait evoluer la population vers une nouvelle generation,
-        avec un taux de mutation de mut_freq
-        """
-        # tableau qui contiendra les fils de individus
-        nouvelle_pop = []
-        # Pour chaque element de la population parente
-        for i in range(len(self.individus)):
-            fils = self.selection_par_tournoi(10).crossover(
-                self.selection_par_tournoi(10))
-            self.pot_mut(fils, mut_freq)
-            nouvelle_pop.append(fils)
-        # Remplacer l'ancienne population par la nouvelle
-        self.individus = nouvelle_pop
-        self.eval()
-        self.generation += 1
-
-    def evoluer_tournoi_garder_parent(self, pourcent_parent, mut_freq):
-        """
-        Fait evoluer la population en gardant une portion
-        des parents
-        """
-        nouvelle_pop = []
-        # Ajouter les meilleur parents a la nouvelle population
-        self.individus.sort(key=lambda x: x.fitness())
-        nb_parents = int(len(self.individus) * (pourcent_parent / 100))
-        nouvelle_pop += self.individus[:nb_parents]
-        # Remplir le reste avec des fils
-        for i in range(len(self.individus) - nb_parents):
-            p1 = self.selection_par_tournoi(20)
-            p2 = self.selection_par_tournoi(20)
-            fils = p1.crossover(p2)
-            self.pot_mut(fils, mut_freq)
-            nouvelle_pop.append(fils)
-        self.individus = nouvelle_pop
-        self.eval()
-        self.generation += 1
-
-    def evoluer_roulette_garder_parent(self, pourcent_parent, mut_freq):
-        """
-        Fait evoluer la population en gardant une portion
-        des parents en utilisant une selection par roulette
-        """
-        nouvelle_pop = []
-        # Ajouter les meilleur parents a la nouvelle population
-        self.individus.sort(key=lambda x: x.fitness())
-        nb_parents = int(len(self.individus) * (pourcent_parent / 100))
-        nouvelle_pop += self.individus[:nb_parents]
-        # Remplir le reste avec des fils
-        for i in range(len(self.individus) - nb_parents):
-            p1 = self.selection_par_roulette()
-            p2 = self.selection_par_roulette()
-            fils = p1.crossover(p2)
-            self.pot_mut(fils, mut_freq)
-            nouvelle_pop.append(fils)
-        self.individus = nouvelle_pop
-        self.eval()
-        self.generation += 1
-
-    def evoluer_roulette(self, mut_freq):
-        """
-        Fait evoluer la population en selectionnant les parents
-        par roulette
-        """
-        nouvelle_pop = []
-        for i in range(len(self.individus)):
-            p1 = self.selection_par_roulette()
-            p2 = self.selection_par_roulette()
-            fils = p1.crossover(p2)
-            self.pot_mut(fils, mut_freq)
-            nouvelle_pop.append(fils)
-        self.individus = nouvelle_pop
-        self.eval()
-        self.generation += 1
-
     def evoluer(self, mut_freq, methode_select,
-                methode_mut, elit, pourcent_parent):
+                methode_mut, elit, pourcent_parent=0):
         """
         Fait evoluer la population avec une methode
         de selection, de mutation et des paramètres
@@ -225,6 +149,14 @@ class Population:
         self.eval()
         self.generation += 1
 
+    def pot_mut(self, fils, methode, mut_freq):
+        r = randint(0, 100)
+        if mut_freq > r:
+            if methode == 'swap':
+                fils.muter_swap()
+            elif methode == 'scramble':
+                fils.muter_scramb()
+
     @classmethod
     def gen_deter(cls, carte):
         """
@@ -240,11 +172,3 @@ class Population:
             p.individus.append(Chemin.from_array(list(perm)))
         p.eval()
         return p
-
-    def pot_mut(self, fils, methode, mut_freq):
-        r = randint(0, 100)
-        if mut_freq > r:
-            if methode == 'swap':
-                fils.muter_swap()
-            elif methode == 'scramble':
-                fils.muter_scramb()
