@@ -2,7 +2,7 @@
 
 from csv import reader
 from Ville import Ville
-from random import randint
+from random import randint, shuffle
 
 
 class Chemin:
@@ -154,6 +154,21 @@ class Chemin:
         """
         x, y = randint(0, len(self) - 1), randint(0, len(self) - 1)
         self[x], self[y] = self[y], self[x]
+
+    def muter_scramb(self):
+        """
+        Choisit aléatoirement une portion du chemin
+        et en mélange les éléments.
+        """
+        debut, fin = randint(0, len(self)), randint(0, len(self))
+        if debut < fin:
+            sub = self[debut:fin + 1]
+            shuffle(sub)
+            self[debut:fin + 1] = sub
+        if debut > fin:
+            sub = self[fin:debut + 1]
+            shuffle(sub)
+            self[fin:debut + 1] = sub
 
     def fermeture(self):
         """

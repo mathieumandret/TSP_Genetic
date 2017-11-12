@@ -7,7 +7,7 @@ x = []
 y = []
 r = 10
 
-for i in range(0, 360, 10):
+for i in range(0, 360, 20):
     rad = 0.01745329252 * i
     x.append(r * cos(rad))
     y.append(r * sin(rad))

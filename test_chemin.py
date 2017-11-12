@@ -3,6 +3,7 @@ import unittest
 
 from Ville import Ville
 from Chemin import Chemin
+from copy import deepcopy
 
 
 class TestChemin(unittest.TestCase):

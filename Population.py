@@ -195,6 +195,36 @@ class Population:
         self.eval()
         self.generation += 1
 
+    def evoluer(self, mut_freq, methode_select,
+                methode_mut, elit, pourcent_parent):
+        """
+        Fait evoluer la population avec une methode
+        de selection, de mutation et des paramètres
+        donnés
+        """
+        # tableau qui contiendra les fils de individus
+        nouvelle_pop = []
+        # Si on doit garder des parents, les selectionner
+        if elit:
+            self.individus.sort(key=lambda x: x.fitness())
+            nb_parents = int(len(self.individus) * (pourcent_parent / 100))
+            nouvelle_pop += self.individus[:nb_parents]
+        # Pour chaque element de la population parente
+        for i in range(len(self.individus)):
+            # Choisir 2 parents selon la methode de selection passée en
+            # paramètres.
+            p1 = self.selection_par_roulette(
+            ) if methode_select == 'roulette' else self.selection_par_tournoi(int(len(self) * 0.2))
+            p2 = self.selection_par_roulette(
+            ) if methode_select == 'roulette' else self.selection_par_tournoi(int(len(self) * 0.2))
+            fils = p1.crossover(p2)
+            self.pot_mut(fils, methode_mut, mut_freq)
+            nouvelle_pop.append(fils)
+            # Remplacer l'ancienne population par la nouvelle
+        self.individus = nouvelle_pop
+        self.eval()
+        self.generation += 1
+
     @classmethod
     def gen_deter(cls, carte):
         """
@@ -211,7 +241,10 @@ class Population:
         p.eval()
         return p
 
-    def pot_mut(self, fils, mut_freq):
+    def pot_mut(self, fils, methode, mut_freq):
         r = randint(0, 100)
         if mut_freq > r:
-            fils.muter_swap()
+            if methode == 'swap':
+                fils.muter_swap()
+            elif methode == 'scramble':
+                fils.muter_scramb()
