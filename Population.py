@@ -22,6 +22,8 @@ class Population:
         # que le premiere valeur qu'on evalueara sera inférieure
         # a meilleurFitness
         self.meilleurFitness = inf
+        # Dictionnaire qui à chaque chemin associe sa longueur
+        self.cache = {}
         # Membre de la population de distance la plus courte, inexistant a
         # l'initilisation
         self.meilleurChemin = None
@@ -46,8 +48,6 @@ class Population:
             # on l'y ajoute.
             if perm not in self.individus:
                 self.individus.append(perm)
-        # Dictionnaire qui à chaque chemin associe sa longueur
-        self.cache = {}
         # Evaluation de la population
         self.eval()
 

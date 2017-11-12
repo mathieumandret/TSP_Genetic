@@ -45,11 +45,19 @@ class TestPopulation(unittest.TestCase):
         self.assertTrue(self.p.meilleurChemin is not None)
         self.assertEqual(len(self.p.meilleurChemin), 6)
 
-    def test_evoluer(self):
+    def test_evoluer_roulette(self):
         pop = Population(10, 30)
         pop.eval()
         ancient_score = pop.meilleurFitness
-        pop.evoluer(30)
+        pop.evoluer_roulette(30)
+        pop.eval()
+        self.assertTrue(ancient_score >= pop.meilleurFitness)
+
+    def test_evoluer_tournoi(self):
+        pop = Population(10, 30)
+        pop.eval()
+        ancient_score = pop.meilleurFitness
+        pop.evoluer_tournoi(30)
         pop.eval()
         self.assertTrue(ancient_score >= pop.meilleurFitness)
 

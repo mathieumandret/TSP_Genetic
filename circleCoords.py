@@ -1,18 +1,16 @@
-#coding: utf-8
-from random import uniform
-from math import pi, cos, sin
+# coding: utf-8
+from math import cos, sin
 from csv import writer
-import matplotlib.pyplot as plt
 
 coords = []
 x = []
 y = []
 r = 10
 
-for i in range(0,360,10):
+for i in range(0, 360, 10):
     rad = 0.01745329252 * i
-    x.append(r*cos(rad))
-    y.append(r*sin(rad))
+    x.append(r * cos(rad))
+    y.append(r * sin(rad))
 
 for i in range(len(x)):
     coords.append((x[i], y[i]))
