@@ -20,7 +20,7 @@ class ClientTK(tk.Tk):
         self.l_title = tk.Label(self, text="Choisir les paramètres")
         self.l_nbinds = tk.Label(self, text="Nombre d'individus")
         self.l_mut = tk.Label(self, text="Fréquence mutation")
-        self.l_gen = tk.Label(self, text="Nombre générations cible")
+        self.l_gen = tk.Label(self, text="Générations")
         self.l_meth = tk.Label(self, text="Méthode de selection")
         self.l_result = tk.Label(self)
         # Text fields
@@ -39,6 +39,9 @@ class ClientTK(tk.Tk):
         self.place_elements()
 
     def place_elements(self):
+        """
+        Organise tous les éléments sur la fenetre
+        """
         self.l_title.grid(row=0, column=1)
         self.l_nbinds.grid(row=1, column=0)
         self.f_nbinds.grid(row=1, column=1)
@@ -52,8 +55,12 @@ class ClientTK(tk.Tk):
         self.cb_benchmark.grid(row=5, column=1)
         self.btn_go.grid(row=6, column=0, pady=5)
         self.btn_exit.grid(row=6, column=1, pady=5)
+        self.l_result.grid(row=7, column=0)
 
     def animer(self, i):
+    """
+    Fonction d'animation
+    """
         if self.select_meth.get() == 'tournoi':
             if self.elitism.get():
                 self.p1.evoluer_tournoi_garder_parent(
@@ -69,10 +76,23 @@ class ClientTK(tk.Tk):
         nx1, ny1 = self.p1.meilleurChemin.to_plot()
         plt.title('Génération: ' + str(self.p1.generation))
         self.graph1.set_data(nx1, ny1)
+        # Longueur du chemin courant
+        curr_best = self.p1.meilleurFitness
+        # Si on a atteint la generation cible
+        if self.p1.generation == int(self.f_gen.get()):
+            # Calculer le taux d'amélioration
+            pct_imp = round(curr_best / self.init_dist * 100)
+            # L'afficher
+            self.l_result.config(
+                text="Taux d'amélioration: " + str(pct_imp) + '%')
 
     def run(self):
+        """
+        Initialise une population et lance
+        l'animation.
+        """
         self.p1 = Population(int(self.f_nbinds.get()), 0, 'cercle.csv')
-        init_dist = self.p1.meilleurFitness
+        self.init_dist = self.p1.meilleurFitness
         x1, y1 = self.p1.meilleurChemin.to_plot()
         fi = plt.figure()
         plt.title('Génération: 1')
@@ -82,13 +102,6 @@ class ClientTK(tk.Tk):
         ani = FuncAnimation(fi, self.animer, interval=10, repeat=False,
                             frames=int(self.f_gen.get()) - 2)
         plt.show()
-        print("1")
-        plt.close()
-        print("2")
-        end_dist = self.p1.meilleurFitness
-        pct_imp = round(end_dist / init_dist * 100)
-        self.l_result.config(text=str(pct_imp))
-        self.l_result.grid(row=7)
 
 
 app = ClientTK()
