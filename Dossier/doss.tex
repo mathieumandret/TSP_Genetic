@@ -1,0 +1,231 @@
+% Created 2017-11-19 Sun 17:37
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[export]{adjustbox}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\usepackage[margin=2.5cm]{geometry}
+\author{Mathieu Mandret}
+\date{}
+\title{Algorithme génétique: application au problème du voyageur de commerce.}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+\section{Introduction}
+\label{sec-1}
+\subsection{Le problème du voyageur de commerce}
+\label{sec-1-1}
+On énonce la situation suivante:
+Un commerçant doit se rendre dans une liste de villes données. Il doit passer une seule fois par chaque ville
+et revenir à sa ville de départ à la fin de son voyage.
+On veut pouvoir savoir dans quel ordre il doit visiter les villes pour parcourir le moins de distance possible.
+Mais il se pose un problème d'explosion combinatoire, en effet, pour $n$ villes, il existe $n!$ ordres de parcours. \\
+\emph{Quelques exemples:} 
+
+Pour $n = 10$ on a $n! = 3628800$, donc pour un parcours contenant 10 villes, il existe plus de 3 millions de parcours possibles. \\
+
+Pour $n = 30$ on a $n! \simeq 2.65 \times 10^{32}$
+
+Une approche déterministe n'est donc pas envisageable, il faudrait générer toutes ces permutations puis les évaluer unes
+par une pour trouver la meilleure ce qui prendrait un temps considérable. 
+
+On observe que la fonction $f: x \rightarrow x!$ croît extrêmement vite:
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=.9\linewidth]{./complexite.png}
+\caption{Croissance des fonctions $n^2, n*10$ et $n!$}
+\end{figure}
+
+\subsection{Les algorithme génétiques}
+\label{sec-1-2}
+
+On peut toutefois espérer trouver une solution approchée à ce problème avec un algorithme génétique.
+
+C'est un type d'algorithme évolutionniste dont le but est de trouver une solution approchée à un problème d'optimisation.
+L'algorithme génétique est inspiré de la théorie de l'évolution qui dit que:
+\begin{itemize}
+\item Une espèce connaitra forcémment des variations aléatoires
+\item Si la variation est génante pour l'individu, il ne se reproduira pas ou peu, et cette variation disparaitra
+\item Si cette variation est avantageuse, il se reproduira plus et elle se diffusera dans les générations futures.
+\end{itemize}
+
+Dans un algorithme génétique, on retrouve toujours les composantes suivantes:
+
+\subsubsection{L'individu}
+
+C'est simplement une solution potentielle au problème.
+
+\subsubsection{La population}
+
+Une population est un ensemble d'individus divers. Analogiquement à la biologie, c'est une espèce.    
+
+\subsubsection{La ``fitness``}
+
+C'est une valeur associée à chaque individu, elle permet de quantifier à quel point
+une solution est adaptée au problème.
+Et des opérations permettant de faire évoluer une population vers une génération meilleure:
+
+\subsubsection{L'évaluation}
+
+Elle consiste à analyser tous les individus de la population pour associer à chacun une valeur de fitness.
+
+\subsubsection{La sélection}
+
+C'est la méthode qui permet de choisir dans la population 2 parents pour générer un individu fils.
+Si on fait le parallèle avec la théorie de l'évolution, cette opération représente la sélection naturelle,
+les individus avec les meilleures caractéristiques, et donc la meilleure fitness, on plus de chance de survivre,
+ce qui est matérialisé par le fait qu'ils ont plus de chance d'être séléctionnés pour se reproduire et transmettre
+leurs caractéristiques au générations futures.
+
+\subsubsection{Le croisement, ou ``crossover``}
+
+Croiser 2 individus représente le processus de reproduction dans la nature. Il revient à créer un individu fils
+en combinant 2 parents, les caractéristiques du fils seront alors un mélange aléatoire de celles des parents.
+
+\subsubsection{La mutation}
+
+Un mutation est un changement aléatoire des caractéristiques d'un individu. 
+
+Pour générer une solution approchée, un algorithme génétique suit le déroulement suivant:
+
+\begin{enumerate}
+\item On génère une population d'individus.
+\item On les évalue
+\item On sélectionne les meilleurs individus qui seront les parents de la prochaine génération
+\item On les croise pour créer les individus fils
+\item On fait muter une partie de ces fils
+\end{enumerate}
+
+On peut ensuite répéter ces étapes autant de fois qu'on le souhaite, jusqu'a obtenir un résultat satisfaisant,
+il faut alors une condition d'arrêt, qui peut être par exemple une valeur de fitness cible ou un nombre limite de générations.
+On peut modéliser ce déroulement avec un diagramme:
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=.6\linewidth]{./GA.png}
+\caption{Déroulement d'un algorithme génétique. Source:becominghuman.ai}
+\end{figure}
+
+\section{Application au problème du voyageur de commerce.}
+\label{sec-2}
+
+On utilisera donc un algorithme génétique pour une approximation du chemin le plus courant reliant $n$ villes.
+\textbf{L'individu} sera alors un chemin, et sa valeur de \textbf{fitness} sera sa longueur.   
+
+\subsection{Représenter les entités}
+\label{sec-2-1}
+
+Une ville est représentée par ses coordonnées $X$ et $Y$.
+Un chemin est une liste ordonnée de villes, sa fitness est sa longueur. Il est aussi possible de représenter chaque individu par une chaine
+binaire, permettant de stocker un très grand nombre d'invidus avec une chaine de longueur relativement petite, par exemple, pour une longueur
+$l = 100$, on peut représenter $2^{100} = 1.27 \times 10^{31}$ individus. Mais pour des raisons de clarté et de simplicité d'implémentation,
+les solution à des problèmes de combinatoire utilisent en général directemment des représentations directes des solutions.
+La population sera donc un ensemble de chemin.
+
+L'algorithme est implémenté dans le paradigme orienté objet avec les classes suivantes:
+\begin{itemize}
+\item Ville
+\item Chemin
+\item Population
+\item Client
+\end{itemize}
+
+Où le client est l'application principale permettant de choisir les paramètres et de visualiser l'évolution de la population.
+Ce qui nous donne l'architecture suivante:
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.9\linewidth]{./UML_Class.png}
+\caption{Diagramme de classe UML}
+\end{figure}
+
+\subsection{Quelques méthodes}
+\label{sec-2-2}
+
+Il existe plusieurs façons de faire chaque opération dans un algorithme génétique.
+
+\subsubsection{La sélection}
+
+La sélection est implementée par 2 méthodes: par roulette et par tournoi. La sélection par
+roulette à donner à chaque individu une change d'être sélectionné proportionnelle à sa
+fitness. Quant à la sélection par tournoi, elle consiste à prendre une sous partie
+de la population et d'en prendre le meilleur individu.
+
+\subsubsection{La mutation}
+
+Il y a aussi 2 méthodes de mutation dans l'algorithme: la méthode \emph{swap} qui échange juste
+la position de 2 villes dans un chemin, et la méthode \emph{scramble} qui mélange toutes les villes
+entre 2 points d'un chemin.
+
+\subsubsection{L'évolution}
+
+La paramètre pouvant varier dans la méthode d'évolution est l'elitisme. Si l'elitisme
+est activé, on conserve une partie des meilleurs parents dans la génération suivante.
+
+\section{Les résultats}
+\label{sec-3}
+
+Pour un nombre de ville relativement petit, on arrive rapidement à un bon resultat, par exemple, voici le résultat pour 19 villes disposées
+le long d'un cercle afin que l'on puisse connaitre à l'avance le chemin le plus court.
+
+\begin{figure}[h]
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=.9\linewidth]{./gen1.png}
+        \caption{Meilleur chemin reliant 20 villes à la première génération}
+    \end{subfigure}
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=.9\linewidth]{./gen200.png}
+        \caption{Meilleur chemin apres 200 générations}
+    \end{subfigure}
+    \caption{Evolution d'une population de 80 individus avec 3\% de mutation}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.9\linewidth]{./evol.png}
+\caption{Évolution de la longueur du meilleur chemin en fonction des générations}
+\end{figure}
+
+\subsection{Performances}
+
+Le temps d'éxecution pour un même nombre de générations varie en fonction du nombre de villes à relier et du nombre
+d'individus dans la population, pour évoluer à la génération suivante, on doit parcourir les $n$ villes, pour évaluer
+la population et pour sélectionner 2 parents. 
+
+\begin{figure}[h]
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=.9\linewidth]{./time.png}
+        \caption{En fonction du nombre d'individus.}
+    \end{subfigure}
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=.9\linewidth]{./cities.png}
+        \caption{En fonction du nombre de villes}
+    \end{subfigure}
+    \caption{Évolution d'une population de 80 individus avec 3\% de mutation}
+\end{figure}
+
+On remarque que l'impact du nombre d'individus et de villes est linéaire et assez similaire. Toutefois,
+l'augmentation du nombre de villes à un influence plus le temps d'éxecution plus importante que
+le nombre de villes.
+
+
+\end{document}

@@ -99,10 +99,10 @@ class Population:
         total = 0
         i = 0
         for chemin in self.individus:
-            total += chemin.fitness()
+            total += 1 / self.cache[chemin]
         r = uniform(0, total)
         while (r > 0):
-            r -= self.individus[i].fitness()
+            r -= 1 / self.individus[i].fitness()
             i += 1
         return self.individus[i - 1]
 
@@ -130,7 +130,7 @@ class Population:
         nouvelle_pop = []
         # Si on doit garder des parents, les selectionner
         if elit:
-            self.individus.sort(key=lambda x: x.fitness())
+            self.trier_meilleurs()
             nb_parents = int(len(self.individus) * (pourcent_parent / 100))
             nouvelle_pop += self.individus[:nb_parents]
         # Pour chaque element de la population parente
