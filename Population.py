@@ -142,7 +142,7 @@ class Population:
             p2 = self.selection_par_roulette(
             ) if methode_select == 'roulette' else self.selection_par_tournoi(int(len(self) * 0.2))
             fils = p1.crossover(p2)
-            self.pot_mut(fils, methode_mut, mut_freq)
+            fils = self.pot_mut(fils, methode_mut, mut_freq)
             nouvelle_pop.append(fils)
             # Remplacer l'ancienne population par la nouvelle
         self.individus = nouvelle_pop
@@ -156,6 +156,7 @@ class Population:
                 fils.muter_swap()
             elif methode == 'scramble':
                 fils.muter_scramb()
+        return fils
 
     @classmethod
     def gen_deter(cls, carte):

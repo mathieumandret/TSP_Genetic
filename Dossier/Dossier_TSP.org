@@ -1,0 +1,38 @@
+#+TITLE: Algorithme génétique: application au problème du voyageur de commerce.
+#+AUTHOR: Mathieu Mandret
+#+OPTIONS: date:nil
+#+LATEX_HEADER: \usepackage[margin=2.5cm]{geometry}
+
+
+* Introduction
+** Le problème du voyageur de commerce
+On énonce la situation suivante:
+Un commerçant doit se rendre dans une liste de villes données. Il doit passer une seule fois par chaque ville
+et revenir à sa ville de départ à la fin de son voyage.
+On veut pouvoir savoir dans quel ordre il doit visiter les villes pour parcourir le moins de distance possible.
+Mais il se pose un problème d'explosion combinatoire, en effet, pour $n$ villes, il existe $n!$ ordres de parcours.
+
+/Quelques exemples:/ \\
+Pour $n = 10$ on a $n! = 3628800$, donc pour un parcours contenant 10 villes, il existe plus de 3 millions de parcours possibles.
+
+Pour $n = 30$ on a $n! \simeq 2.65 \times 10^{32}$
+
+Une approche déterministe n'est donc pas envisageable, il faudrait générer toutes ces permutations puis les évaluer unes
+par une pour trouver la meilleure ce qui prendrait un temps considérable. 
+# Calculer le temps de calcul pour 5 permutations et faire une estimation des autres temps
+
+On observe que la fonction $f: x \rightarrow x!$ croît extrêmement vite:
+
+# Re-rendre le graphe en remplace x*10
+#+CAPTION: Croissance des fonctions $x^2, x^10$ et $x!$
+[[./complexite.png]]
+
+** Les algorithme génétiques
+
+On peut toutefois espérer trouver une solution approchée à ce problème avec un algorithme génétique.
+
+Ce type d'algorithme s'inspire de la sélection naturelle pour générer, génération après génération, des
+individus dont les caractéristiques s'améliorent par croisement et mutation.
+
+*** Principe général
+
