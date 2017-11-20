@@ -185,7 +185,7 @@ Afin d'avoir de bon résultat, il est primordial d'avoir une grande diversité d
 autrement la population se stabiliserait très vite et on retrouverait toujours les mêmes éléments.
 Mais on doit aussi générer cette population aléatoirement, il faut alors contrôler cette génération afin qu'on ne retrouve
 jamais 2 fois le même chemin dans la population initiale. Ceci est plutôt simple grâce à l'opérateur \emph{not in}
-proposé par Python qui permet de vérifier si un element appartient déjà à une liste. En définissant la méthode \emph{\_\_eq\_\_}
+proposé par Python qui permet de vérifier si un élément appartient déjà à une liste. En définissant la méthode \emph{\_\_eq\_\_}
 dans la classe chemin, on peut déterminer quand est ce que 2 chemins sont égaux et ainsi savoir si un chemin existe déjà dans
 la population.
 
@@ -232,7 +232,7 @@ d'arrêt, qui est ici un nombre de générations cible, puisqu'on ne connaît pa
 On peut aussi choisir si on veut de l'élitisme dans la sélection et si l'on veut enregistrer la trace de l'exécution, par défaut
 dans le fichier \emph{data.csv}.
 
-Pour afficher l'evolution en temps réel, j'utilise le module \emph{matplotlib} qui permet de placer les villes en utilisant la méthode
+Pour afficher l'évolution en temps réel, j'utilise le module \emph{matplotlib} qui permet de placer les villes en utilisant la méthode
 \emph{scatter} normalement destinées à tracer des nuages de points, et à les relier avec \emph{plot}. Ce module propose aussi la fonction
 \emph{Funcanimation} qui permet de mettre à jours à chaque images les données du graphique, il suffit alors de remplacer les paramètres
 de \emph{plot} avec la liste des coordonnées du meilleur chemin à chaque fois que celui-ci change.
@@ -305,12 +305,13 @@ en tester plusieurs manuellement.
 \subsection{Amélioration possibles}
 
 Il y a encore beaucoup de place pour de l'optimisation dans mon code, je pourrai ajouter d'autres méthodes de crossover, de swap et de
-selection pour voir si je peux atteindre de meilleures performances.
+sélection pour voir si je peux atteindre de meilleures performances.
 
 \subsection{Bilan}
 
 Ce projet m'a permit de découvrir les algorithmes génétiques, concept qui m'était inconnu, il m'a aussi donné l'occasion de mettre en pratique pour la première
-fois l'orienté objet avec le langage Python.
+fois l'orienté objet avec le langage Python. La partie graphique a également été très intéressante à développer grâces au librairies matplotlib et tkinter,
+qui proposent beaucoup de fonctionnalités et sont très bien documentées.
 
 \clearpage
 \section{Annexe: le code}
