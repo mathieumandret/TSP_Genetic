@@ -85,25 +85,25 @@ L'algorithme génétique est inspiré de la théorie de l'évolution qui dit que
 
 Dans un algorithme génétique, on retrouve toujours les composantes suivantes:
 
-\subsubsection{L'individu}
+\subsubsection*{L'individu}
 
 C'est simplement une solution potentielle au problème.
 
-\subsubsection{La population}
+\subsubsection*{La population}
 
 Une population est un ensemble d'individus divers. Analogiquement à la biologie, c'est une espèce.    
 
-\subsubsection{La ``fitness``}
+\subsubsection*{La ``fitness``}
 
 C'est une valeur associée à chaque individu, elle permet de quantifier à quel point
 une solution est adaptée au problème.
 Et des opérations permettant de faire évoluer une population vers une génération meilleure:
 
-\subsubsection{L'évaluation}
+\subsubsection*{L'évaluation}
 
 Elle consiste à analyser tous les individus de la population pour associer à chacun une valeur de fitness.
 
-\subsubsection{La sélection}
+\subsubsection*{La sélection}
 
 C'est la méthode qui permet de choisir dans la population 2 parents pour générer un individu fils.
 Si on fait le parallèle avec la théorie de l'évolution, cette opération représente la sélection naturelle,
@@ -111,12 +111,12 @@ les individus avec les meilleures caractéristiques, et donc la meilleure fitnes
 ce qui est matérialisé par le fait qu'ils ont plus de chance d'être sélectionnés pour se reproduire et transmettre
 leurs caractéristiques au générations futures.
 
-\subsubsection{Le croisement, ou ``crossover``}
+\subsubsection*{Le croisement, ou ``crossover``}
 
 Croiser 2 individus représente le processus de reproduction dans la nature. Il revient à créer un individu fils
 en combinant 2 parents, les caractéristiques du fils seront alors un mélange aléatoire de celles des parents.
 
-\subsubsection{La mutation}
+\subsubsection*{La mutation}
 
 Un mutation est un changement aléatoire des caractéristiques d'un individu. 
 
@@ -179,7 +179,7 @@ Ce qui nous donne l'architecture suivante:
 Il existe plusieurs façons de faire chaque opération dans un algorithme génétique. Voici une liste de celles que j'ai
 implémenté.
 
-\subsubsection{La génération de la population}
+\subsubsection*{La génération de la population}
 
 Afin d'avoir de bon résultat, il est primordial d'avoir une grande diversité dans les individus de la population initiale,
 autrement la population se stabiliserait très vite et on retrouverait toujours les mêmes éléments.
@@ -189,7 +189,7 @@ proposé par Python qui permet de vérifier si un element appartient déjà à u
 dans la classe chemin, on peut déterminer quand est ce que 2 chemins sont égaux et ainsi savoir si un chemin existe déjà dans
 la population.
 
-\subsubsection{La sélection}
+\subsubsection*{La sélection}
 
 La sélection est implémentée par 2 méthodes: par roulette et par tournoi. La sélection par
 roulette à donner à chaque individu une change d'être sélectionné proportionnelle à sa
@@ -198,13 +198,13 @@ de la population et d'en sélectionner le meilleur individu. Cette méthode, ou 
 implémentée pose un problème de performance, à chaque évolution, on doit sommer toutes les \emph{fitness} de la population
 pour pouvoir connaître le proportion de cette somme que la \emph{fitness} d'un individu représente.
 
-\subsubsection{La mutation}
+\subsubsection*{La mutation}
 
 Il y a aussi 2 méthodes de mutation dans l'algorithme: la méthode \emph{swap} qui échange juste
 la position de 2 villes dans un chemin, et la méthode \emph{scramble} qui mélange toutes les villes
 entre 2 points d'un chemin.
 
-\subsubsection{Le croisement}
+\subsubsection*{Le croisement}
 
 Pour créer un chemin fils en combinant 2 parents, il faut une méthode de croisement. Celle utilisée ici
 est la \emph{Partially Matched Crossover} ou \emph{PMX}. Il consiste à choisir aléatoirement 2 points de découpe
@@ -212,7 +212,7 @@ dans un chemin, et de remplir l'intérieur de ces points avec des composantes, i
 ensuite, on parcoure touts les emplacement restés vides et on y place des villes du deuxième parent si elle n'y sont pas
 déjà.
 
-\subsubsection{L'évolution}
+\subsubsection*{L'évolution}
 
 La paramètre pouvant varier dans la méthode d'évolution est l'élitisme. Si l'élitisme
 est activé, on conserve une partie des meilleurs parents dans la génération suivante.
@@ -221,8 +221,11 @@ est activé, on conserve une partie des meilleurs parents dans la génération s
 \section{Le client}
 
 Lorsqu'on lance l'application avec le fichier principal \emph{tk\_client.py}. On se retrouve face à cette fenêtre:
-% Screen client
-
+\begin{figure}[H]
+\centering
+\includegraphics[width=.6\linewidth]{./screen_client.png}
+\caption{Client graphique de l'application}
+\end{figure}
 À partir d'ici, on peut choisir les villes que l'on cherche à relier depuis un fichier \emph{csv} qui contient une liste
 de coordonnées. On peut aussi choisir la méthode de sélection, de mutation, le nombre d'individus dans la population, la condition
 d'arrêt, qui est ici un nombre de générations cible, puisqu'on ne connaît pas à l'avance le résultat que l'on veut obtenir.
@@ -306,7 +309,7 @@ selection pour voir si je peux atteindre de meilleures performances.
 
 \subsection{Bilan}
 
-Ce projet m'a permit de découvrir les algorithmes génétiques, concept qui m'était inconnu, il m'a aussi permit de mettre en pratique pour la première
+Ce projet m'a permit de découvrir les algorithmes génétiques, concept qui m'était inconnu, il m'a aussi donné l'occasion de mettre en pratique pour la première
 fois l'orienté objet avec le langage Python.
 
 \clearpage
