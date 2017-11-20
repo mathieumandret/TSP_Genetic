@@ -1,8 +1,8 @@
-% Created 2017-11-19 Sun 17:37
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{fixltx2e}
+\usepackage[francais]{babel}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{longtable}
@@ -16,6 +16,7 @@
 \usepackage{textcomp}
 \usepackage{marvosym}
 \usepackage{wasysym}
+\usepackage{minted}
 \usepackage{amssymb}
 \usepackage{hyperref}
 \tolerance=1000
@@ -25,10 +26,11 @@
 \title{Algorithme génétique: application au problème du voyageur de commerce.}
 \begin{document}
 
+\begin{titlepage}
 \maketitle
+\end{titlepage}
 \tableofcontents
-
-
+\clearpage
 \section{Introduction}
 \label{sec-1}
 \subsection{Le problème du voyageur de commerce}
@@ -49,10 +51,10 @@ par une pour trouver la meilleure ce qui prendrait un temps considérable.
 
 On observe que la fonction $f: x \rightarrow x!$ croît extrêmement vite:
 
-\begin{figure}[htb]
+\begin{figure}[H]
 \centering
 \includegraphics[width=.9\linewidth]{./complexite.png}
-\caption{Croissance des fonctions $n^2, n*10$ et $n!$}
+\caption{Croissance des fonctions $n^2, n \times 10$ et $n!$}
 \end{figure}
 
 \subsection{Les algorithme génétiques}
@@ -63,8 +65,8 @@ On peut toutefois espérer trouver une solution approchée à ce problème avec 
 C'est un type d'algorithme évolutionniste dont le but est de trouver une solution approchée à un problème d'optimisation.
 L'algorithme génétique est inspiré de la théorie de l'évolution qui dit que:
 \begin{itemize}
-\item Une espèce connaitra forcémment des variations aléatoires
-\item Si la variation est génante pour l'individu, il ne se reproduira pas ou peu, et cette variation disparaitra
+\item Une espèce connaîtra forcément des variations aléatoires
+\item Si la variation est gênante pour l'individu, il ne se reproduira pas ou peu, et cette variation disparaîtras
 \item Si cette variation est avantageuse, il se reproduira plus et elle se diffusera dans les générations futures.
 \end{itemize}
 
@@ -93,7 +95,7 @@ Elle consiste à analyser tous les individus de la population pour associer à c
 C'est la méthode qui permet de choisir dans la population 2 parents pour générer un individu fils.
 Si on fait le parallèle avec la théorie de l'évolution, cette opération représente la sélection naturelle,
 les individus avec les meilleures caractéristiques, et donc la meilleure fitness, on plus de chance de survivre,
-ce qui est matérialisé par le fait qu'ils ont plus de chance d'être séléctionnés pour se reproduire et transmettre
+ce qui est matérialisé par le fait qu'ils ont plus de chance d'être sélectionnés pour se reproduire et transmettre
 leurs caractéristiques au générations futures.
 
 \subsubsection{Le croisement, ou ``crossover``}
@@ -115,11 +117,11 @@ Pour générer une solution approchée, un algorithme génétique suit le dérou
 \item On fait muter une partie de ces fils
 \end{enumerate}
 
-On peut ensuite répéter ces étapes autant de fois qu'on le souhaite, jusqu'a obtenir un résultat satisfaisant,
+On peut ensuite répéter ces étapes autant de fois qu'on le souhaite, jusqu'à obtenir un résultat satisfaisant,
 il faut alors une condition d'arrêt, qui peut être par exemple une valeur de fitness cible ou un nombre limite de générations.
 On peut modéliser ce déroulement avec un diagramme:
 
-\begin{figure}[htb]
+\begin{figure}[H]
 \centering
 \includegraphics[width=.6\linewidth]{./GA.png}
 \caption{Déroulement d'un algorithme génétique. Source:becominghuman.ai}
@@ -135,10 +137,10 @@ On utilisera donc un algorithme génétique pour une approximation du chemin le 
 \label{sec-2-1}
 
 Une ville est représentée par ses coordonnées $X$ et $Y$.
-Un chemin est une liste ordonnée de villes, sa fitness est sa longueur. Il est aussi possible de représenter chaque individu par une chaine
-binaire, permettant de stocker un très grand nombre d'invidus avec une chaine de longueur relativement petite, par exemple, pour une longueur
+Un chemin est une liste ordonnée de villes, sa fitness est sa longueur. Il est aussi possible de représenter chaque individu par une chaîne
+binaire, permettant de stocker un très grand nombre d'individus avec une chaîne de longueur relativement petite, par exemple, pour une longueur
 $l = 100$, on peut représenter $2^{100} = 1.27 \times 10^{31}$ individus. Mais pour des raisons de clarté et de simplicité d'implémentation,
-les solution à des problèmes de combinatoire utilisent en général directemment des représentations directes des solutions.
+les solution à des problèmes de combinatoire utilisent en général directement des représentations directes des solutions.
 La population sera donc un ensemble de chemin.
 
 L'algorithme est implémenté dans le paradigme orienté objet avec les classes suivantes:
@@ -152,7 +154,7 @@ L'algorithme est implémenté dans le paradigme orienté objet avec les classes 
 Où le client est l'application principale permettant de choisir les paramètres et de visualiser l'évolution de la population.
 Ce qui nous donne l'architecture suivante:
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[width=.9\linewidth]{./UML_Class.png}
 \caption{Diagramme de classe UML}
@@ -161,14 +163,27 @@ Ce qui nous donne l'architecture suivante:
 \subsection{Quelques méthodes}
 \label{sec-2-2}
 
-Il existe plusieurs façons de faire chaque opération dans un algorithme génétique.
+Il existe plusieurs façons de faire chaque opération dans un algorithme génétique. Voici une liste de celles que j'ai
+implémenté.
+
+\subsubsection{La génération de la population}
+
+Afin d'avoir de bon résultat, il est primordial d'avoir une grande diversité dans les individus de la population initiale,
+autrement la population se stabiliserait très vite et on retrouverait toujours les mêmes éléments.
+Mais on doit aussi générer cette population aléatoirement, il faut alors contrôler cette génération afin qu'on ne retrouve
+jamais 2 fois le même chemin dans la population initiale. Ceci est plutôt simple grâce à l'opérateur \emph{not in}
+proposé par Python qui permet de vérifier si un element appartient déjà à une liste. En définissant la méthode \emph{\_\_eq\_\_}
+dans la classe chemin, on peut déterminer quand est ce que 2 chemins sont égaux et ainsi savoir si un chemin existe déjà dans
+la population.
 
 \subsubsection{La sélection}
 
-La sélection est implementée par 2 méthodes: par roulette et par tournoi. La sélection par
+La sélection est implémentée par 2 méthodes: par roulette et par tournoi. La sélection par
 roulette à donner à chaque individu une change d'être sélectionné proportionnelle à sa
 fitness. Quant à la sélection par tournoi, elle consiste à prendre une sous partie
-de la population et d'en prendre le meilleur individu.
+de la population et d'en sélectionner le meilleur individu. Cette méthode, ou du moins la manière dont je l'ai
+implémentée pose un problème de performance, à chaque évolution, on doit sommer toutes les \emph{fitness} de la population
+pour pouvoir connaître le proportion de cette somme que la \emph{fitness} d'un individu représente.
 
 \subsubsection{La mutation}
 
@@ -176,16 +191,36 @@ Il y a aussi 2 méthodes de mutation dans l'algorithme: la méthode \emph{swap} 
 la position de 2 villes dans un chemin, et la méthode \emph{scramble} qui mélange toutes les villes
 entre 2 points d'un chemin.
 
+\subsubsection{Le croisement}
+
+Pour créer un chemin fils en combinant 2 parents, il faut une méthode de croisement. Celle utilisée ici
+est la \emph{Partially Matched Crossover} ou \emph{PMX}. Il consiste à choisir aléatoirement 2 points de découpe
+dans un chemin, et de remplir l'intérieur de ces points avec des composantes, ici des villes, du premier parent,
+ensuite, on parcoure touts les emplacement restés vides et on y place des villes du deuxième parent si elle n'y sont pas
+déjà.
+
 \subsubsection{L'évolution}
 
-La paramètre pouvant varier dans la méthode d'évolution est l'elitisme. Si l'elitisme
+La paramètre pouvant varier dans la méthode d'évolution est l'élitisme. Si l'élitisme
 est activé, on conserve une partie des meilleurs parents dans la génération suivante.
+
+
+\section{Le client}
+
+Lorsqu'on lance l'application avec le fichier principal \emph{tk\_client.py}. On se retrouve face à cette fenêtre:
+% Screen client
+
+À partir d'ici, on peut choisir les villes que l'on cherche à relier depuis un fichier \emph{csv} qui contient une liste
+de coordonnées. On peut aussi choisir la méthode de sélection, de mutation, le nombre d'individus dans la population, la condition
+d'arrêt, qui est ici un nombre de générations cible, puisqu'on ne connaît pas à l'avance le résultat que l'on veut obtenir.
+On peut aussi choisir si on veut de l'élitisme dans la sélection et si l'on veut enregistrer la trace de l'exécution, par défaut
+dans le fichier \emph{data.csv}.
 
 \section{Les résultats}
 \label{sec-3}
 
-Pour un nombre de ville relativement petit, on arrive rapidement à un bon resultat, par exemple, voici le résultat pour 19 villes disposées
-le long d'un cercle afin que l'on puisse connaitre à l'avance le chemin le plus court.
+Pour un nombre de ville relativement petit, on arrive rapidement à un bon résultat, par exemple, voici le résultat pour 19 villes disposées
+le long d'un cercle afin que l'on puisse connaître à l'avance le chemin le plus court.
 
 \begin{figure}[h]
     \begin{subfigure}{.5\textwidth}
@@ -194,9 +229,10 @@ le long d'un cercle afin que l'on puisse connaitre à l'avance le chemin le plus
     \end{subfigure}
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=.9\linewidth]{./gen200.png}
-        \caption{Meilleur chemin apres 200 générations}
+        \caption{Meilleur chemin après 200 générations
+        }
     \end{subfigure}
-    \caption{Evolution d'une population de 80 individus avec 3\% de mutation}
+    \caption{Évolution d'une population de 80 individus avec 3\% de mutation}
 \end{figure}
 
 \begin{figure}[H]
@@ -207,7 +243,7 @@ le long d'un cercle afin que l'on puisse connaitre à l'avance le chemin le plus
 
 \subsection{Performances}
 
-Le temps d'éxecution pour un même nombre de générations varie en fonction du nombre de villes à relier et du nombre
+Le temps d'exécution pour un même nombre de générations varie en fonction du nombre de villes à relier et du nombre
 d'individus dans la population, pour évoluer à la génération suivante, on doit parcourir les $n$ villes, pour évaluer
 la population et pour sélectionner 2 parents. 
 
@@ -224,8 +260,21 @@ la population et pour sélectionner 2 parents.
 \end{figure}
 
 On remarque que l'impact du nombre d'individus et de villes est linéaire et assez similaire. Toutefois,
-l'augmentation du nombre de villes à un influence plus le temps d'éxecution plus importante que
+l'augmentation du nombre de villes à un influence plus le temps d'exécution plus importante que
 le nombre de villes.
 
 
+\section{Conclusion}
+
+\subsection{Difficultés rencontrées}
+Bien que le concept général de l'algorithme génétique soit plutôt simple, l'implémentation de la fonction crossover m'a pris beaucoup
+de temps. J'essayais d'extraire un sous tableau de la liste de villes d'un chemin pour y placer les villes du parent et d'en suite réintégrer
+ce tableau à la liste. Alors qu'il suffisait d'utiliser un tableau sous sa forme canonique pour le fils, dont toutes les cases sont initialisées à
+\emph{None} et de parcourir le fils avec une boucle \emph{for} du type:
+\begin{minted}{python}
+for i in range(point\_de\_decoupe\_1, point\_de\_decoupe\_2)
+\end{minted}
+pour placer les villes du premier parent à l'intérieur du point de découpe. Pour remplir le reste, il faut ensuite parcourir toutes les cellules du fils
+jusqu'à rencontrer un \emph{None}, puis parcourir toutes les villes du deuxième parent pour en trouver une qui ne figure pas déjà dans la fils, encore
+une fois grâce à l'opérateur \emph{not in}.
 \end{document}
