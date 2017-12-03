@@ -1,0 +1,10 @@
+\BOOKMARK [1][-]{section.1}{Le probl\350me du voyageur de commerce}{}% 1
+\BOOKMARK [1][-]{section.2}{L'algorithme g\351n\351tique}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Les villes}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Les chemin}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{La populations}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{L'initialisation}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{La selection}{section.2}% 7
+\BOOKMARK [3][-]{subsubsection.2.5.1}{La selection par roulette}{subsection.2.5}% 8
+\BOOKMARK [3][-]{subsubsection.2.5.2}{La selection par tournoi}{subsection.2.5}% 9
+\BOOKMARK [2][-]{subsection.2.6}{Le croisement}{section.2}% 10

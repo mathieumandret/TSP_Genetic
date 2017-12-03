@@ -166,3 +166,7 @@ qui n'est pas déjà dans le fils, on l'y place et on continue jusqu'a ce qu'il 
               for i in range(fin, debut):
                   fils[i] = other[i]
 #+END_SRC
+
+#+BEGIN_SRC python
+for i in range(point_decoupe_1, point_decoupe_2)
+#+END_SRC

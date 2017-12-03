@@ -1,0 +1,24 @@
+\select@language {french}
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
+\contentsline {subsection}{\numberline {1.1}Le probl\IeC {\`e}me du voyageur de commerce}{2}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Les algorithme g\IeC {\'e}n\IeC {\'e}tiques}{2}{subsection.1.2}
+\contentsline {subsubsection}{\numberline {1.2.1}L'individu}{3}{subsubsection.1.2.1}
+\contentsline {subsubsection}{\numberline {1.2.2}La population}{3}{subsubsection.1.2.2}
+\contentsline {subsubsection}{\numberline {1.2.3}La ``fitness``}{3}{subsubsection.1.2.3}
+\contentsline {subsubsection}{\numberline {1.2.4}L'\IeC {\'e}valuation}{3}{subsubsection.1.2.4}
+\contentsline {subsubsection}{\numberline {1.2.5}La s\IeC {\'e}lection}{3}{subsubsection.1.2.5}
+\contentsline {subsubsection}{\numberline {1.2.6}Le croisement, ou ``crossover``}{3}{subsubsection.1.2.6}
+\contentsline {subsubsection}{\numberline {1.2.7}La mutation}{3}{subsubsection.1.2.7}
+\contentsline {section}{\numberline {2}Application au probl\IeC {\`e}me du voyageur de commerce.}{4}{section.2}
+\contentsline {subsection}{\numberline {2.1}Repr\IeC {\'e}senter les entit\IeC {\'e}s}{4}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Quelques m\IeC {\'e}thodes}{5}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}La g\IeC {\'e}n\IeC {\'e}ration de la population}{5}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}La s\IeC {\'e}lection}{5}{subsubsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.3}La mutation}{5}{subsubsection.2.2.3}
+\contentsline {subsubsection}{\numberline {2.2.4}Le croisement}{6}{subsubsection.2.2.4}
+\contentsline {subsubsection}{\numberline {2.2.5}L'\IeC {\'e}volution}{6}{subsubsection.2.2.5}
+\contentsline {section}{\numberline {3}Le client}{6}{section.3}
+\contentsline {section}{\numberline {4}Les r\IeC {\'e}sultats}{6}{section.4}
+\contentsline {subsection}{\numberline {4.1}Performances}{7}{subsection.4.1}
+\contentsline {section}{\numberline {5}Conclusion}{8}{section.5}
+\contentsline {subsection}{\numberline {5.1}Difficult\IeC {\'e}s rencontr\IeC {\'e}es}{8}{subsection.5.1}
