@@ -1,11 +1,17 @@
-\documentclass{beamer}
+\documentclass[16pt]{beamer}
 
 \usepackage[french]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{graphics}
+\usepackage{graphicx}
+\DeclareMathSizes{16}{36}{22}{18}
 \hypersetup{pdfpagemode=FullScreen}
-\usetheme{Warsaw}
+\usetheme{Szeged}
+\usecolortheme{beaver}
+\setbeamertemplate{itemize item}{\color{red}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{red}$\blacktriangleright$}
+\setbeamercolor{local structure}{fg=red}
 % \usefonttheme{serif}
 \title{Algorithme génétique: application au problème du voyageur de commerce}
 \author{Mathieu Mandret}
@@ -15,10 +21,13 @@
 % Page de titre
 \begin{frame}
   \maketitle
+  \centering
+  \includegraphics[scale=0.05]{logo_IUT.png}
 \end{frame}
 
 % Sommaire
 \begin{frame}
+  \frametitle{Plan}
   \tableofcontents
 \end{frame}
 
@@ -35,13 +44,14 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Le problème du voyageur de commerce}
   \begin{center}
     \includegraphics[scale=0.7]{Carte_france_10_villes.png}
   \end{center}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Approche deterministe}
+  \frametitle{Approche déterministe}
   Permutations de $n$ éléments:
   \[
   \begin{array}{r c l}
@@ -52,7 +62,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Approche deterministe}
+  \frametitle{Approche déterministe}
   Permutations de $n$ éléments:
   \[
   \begin{array}{r c l}
@@ -63,7 +73,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Approche deterministe}
+  \frametitle{Approche déterministe}
   \[
   \begin{array}{r c l}
   1 \text{ permutation} &=& 10^{-9}s \\ \pause{}
@@ -73,14 +83,14 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Approche deterministe}
+  \frametitle{Approche déterministe}
   \[
   2.65 \times 10^{32} \text{ permutations} = 2.65 \times 10^{23}s
   \]
 \end{frame}
 
 \begin{frame}
-  \frametitle{Approche deterministe}
+  \frametitle{Approche déterministe}
   \[
   \frac{2.65 \times 10^{23}}{3.154 \times 10^{7}} \text{ années}
   \]
@@ -88,7 +98,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Approche deterministe}
+  \frametitle{Approche déterministe}
   \[
   8.4 \times 10^{15} \text{ années}
   \]
@@ -101,7 +111,7 @@
   \begin{itemize}
     \item Solution approchée
     \item Inspiré de la théorie de l'évolution
-    \item Selection naturelle
+    \item Sélection naturelle
   \end{itemize}
 \end{frame}
 
@@ -134,13 +144,15 @@
 \section{Application au problème du voyageur du commerce}
 \begin{frame}
   \frametitle{Application au problème du voyageur du commerce}
+  \begin{block}{}
 \[
   \begin{array}{r c l}
     \text{Individu } &\rightarrow& \text{ Chemin} \\
     \text{Population } &\rightarrow& \text{ Ensemble de chemins} \\
     \text{Fitness } &\rightarrow& \text{ Longueur du chemin} 
-   \end{array}
+   \end{array}{}
 \]
+\end{block}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -234,7 +246,7 @@ Distance par rapport à une autre ville
   Tournoi
   \begin{enumerate}
     \item Prendre $x$ individus au hasard
-    \item Selectionner le meilleur 
+    \item Sélectionner le meilleur 
   \end{enumerate}
 \end{frame}
 
@@ -273,7 +285,7 @@ Distance par rapport à une autre ville
 
 \begin{frame}
   \frametitle{Population}
-  \framesubtitle{Sélection: Compléxité}
+  \framesubtitle{Sélection: Complexité}
   Recalculer la longueur de tous les chemins \\
   En faire la somme \\ \pause{}
   \textbf{Utiliser un cache}
@@ -286,7 +298,7 @@ Distance par rapport à une autre ville
     [\text{Chemin}] \Rightarrow \text{fitness} \pause{}
   \]
   \[
-   \textbf{Si } \text{chemin} \in \text{clés} \text{ récuperer } \textbf{sinon} \text{ calculer}
+   \textbf{Si } \text{chemin} \in \text{clés} \text{ récupérer } \textbf{sinon} \text{ calculer}
   \]
 \end{frame}
 
@@ -303,8 +315,8 @@ Distance par rapport à une autre ville
   \frametitle{Population}
   \framesubtitle{Mutation}
   \begin{enumerate}
-    \item Swap \pause{} $\rightarrow$ échanger 2 villes
-    \item Scramble \pause{} $\rightarrow$ mélanger les villes entre 2 bornes
+    \item Swap $\rightarrow$ échanger 2 villes
+    \item Scramble $\rightarrow$ mélanger les villes entre 2 bornes
   \end{enumerate}
 \end{frame}
 
@@ -328,15 +340,20 @@ Distance par rapport à une autre ville
 \end{frame}
 
 \begin{frame}
-  \begin{figure}[h]
-    \begin{subfigure}
-        \includegraphics[scale=0.3]{./gen1.png}
-    \end{subfigure}
-    \begin{subfigure}
-        \includegraphics[scale=0.3]{./gen200.png}
-    \end{subfigure}
-    \caption{Génération 1 - 200}
-\end{figure}
+  \begin{figure}
+  \frametitle{Mesurer l'efficacité}
+  \framesubtitle{Pourcentage d'amélioration}
+    \includegraphics[width=0.5\textwidth]{gen1.png}
+    \includegraphics[width=0.5\textwidth]{gen200.png}
+  \end{figure}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}
+  \frametitle{Conclusion}
+  \pause{}
+  Difficultés: Crossover, et roulette.
 \end{frame}
 
 \end{document}
