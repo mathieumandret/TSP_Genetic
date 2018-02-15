@@ -1,9 +1,10 @@
 # coding: utf-8
 
 import tkinter as tk
-from Population import Population
+import tkinter.filedialog
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
+from Population import Population
 
 
 class ClientTK(tk.Tk):
@@ -14,9 +15,6 @@ class ClientTK(tk.Tk):
         self.elitism = tk.IntVar()
         self.cb_elitism = tk.Checkbutton(
             self, variable=self.elitism, text="Elitisme")
-        self.keep_benchmark = tk.IntVar()
-        self.cb_benchmark = tk.Checkbutton(
-            self, variable=self.keep_benchmark, text="Enregistrer les données")
         # Labels
         self.l_title = tk.Label(
             self, text="Choisir les paramètres:", font=("Source Code Pro", 12))
@@ -51,7 +49,7 @@ class ClientTK(tk.Tk):
         self.place_elements()
 
     def openfile(self):
-        self.carte_name = tk.filedialog.askopenfilename(
+        self.carte_name = tkinter.filedialog.askopenfilename(
             filetypes=[('CSV files', '*.csv')])
 
     def place_elements(self):
@@ -72,7 +70,6 @@ class ClientTK(tk.Tk):
         self.l_carte.grid(row=6, column=0)
         self.btn_carte.grid(row=6, column=1)
         self.cb_elitism.grid(row=7, column=0)
-        self.cb_benchmark.grid(row=7, column=1, padx=3)
         self.btn_go.grid(row=8, column=0, pady=5)
         self.btn_exit.grid(row=8, column=1, pady=5)
         self.l_result.grid(row=9, column=0, pady=3, padx=3)
@@ -103,26 +100,6 @@ class ClientTK(tk.Tk):
                 text="Taux d'amélioration: ")
             self.l_result_num.config(
                 text=str(self.pct_imp) + '%')
-            if self.keep_benchmark.get() == 1:
-                self.benchmark()
-
-    def benchmark(self):
-        """
-        Ecrit le taux d'amélioration
-        en fonction des paramètres courants
-        dans un fichier
-        """
-        opts = '{0}, {1}, {2}, {3}, {4}, {5}, {6}\n'.format(
-            self.f_nbinds.get(),
-            self.f_gen.get(),
-            self.f_mut.get(),
-            self.select_meth.get(),
-            self.select_mut.get(),
-            self.elitism.get(),
-            self.pct_imp
-        )
-        with open('data.csv', 'a') as f:
-            f.write(opts)
 
     def run(self):
         """
