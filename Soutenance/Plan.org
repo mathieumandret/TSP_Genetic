@@ -1,6 +1,0 @@
-* Intro
-Blabla jvais presenter mon projet.
-* Problème du voyageur de commerce
-* Algorithme génétiques
-* Application au problème du voyageur de commerce
-* Mon application
