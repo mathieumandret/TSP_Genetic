@@ -72,37 +72,6 @@
   \]
 \end{frame}
 
-\begin{frame}
-  \frametitle{Approche déterministe}
-  \[
-  \begin{array}{r c l}
-     1\text{ permutation} &=& 10^{-9}s
-  \end{array}
-  \]
-\end{frame}
-
-\begin{frame}
-  \frametitle{Approche déterministe}
-  \[
-  2.65 \times 10^{32} \text{ permutations} = 2.65 \times 10^{23}s
-  \]
-\end{frame}
-
-\begin{frame}
-  \frametitle{Approche déterministe}
-  \[
-  \frac{2.65 \times 10^{23}}{3.154 \times 10^{7}} \text{ années}
-  \]
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Approche déterministe}
-  \[
-  8.4 \times 10^{15} \text{ années}
-  \]
-\end{frame}
-
 \section{Algorithmes génétiques}
 
 \begin{frame}
@@ -215,19 +184,7 @@ Distance par rapport à une autre ville
 \begin{frame}
   \frametitle{Chemin}
   \framesubtitle{Mutation}
-  \begin{enumerate}
-    \item Swap
-    \item Scramble
-  \end{enumerate}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Chemin}
-  \framesubtitle{Mutation}
-  \begin{enumerate}
-    \item Swap $\rightarrow$ échanger 2 villes
-    \item Scramble $\rightarrow$ mélanger les villes entre 2 bornes
-  \end{enumerate}
+  Échanger la position de 2 villes
 \end{frame}
 
 \begin{frame}
@@ -236,7 +193,6 @@ Distance par rapport à une autre ville
   \begin{itemize}
     \item Initialisation
     \item Selection
-    \item Condition d'arrêt
   \end{itemize}
 \end{frame}
 
@@ -269,45 +225,19 @@ Distance par rapport à une autre ville
 
 \begin{frame}
   \frametitle{Population}
-  \framesubtitle{Sélection}
-  \centering
-  Roulette \pause{}
-  \begin{figure}
-    \includegraphics[scale=0.6]{roulette.jpg}
-  \end{figure}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Population}
-  \framesubtitle{Sélection}
-  \centering
-  Roulette
-  \begin{enumerate}
-    \item Sommer toutes les fitness
-    \item Prendre un nombre aléatoire en 0 et la somme
-    \item Tant que ce nombre n'est pas 0 ou moins 
-    \item Se positionner un chemin
-    \item Soustraire au nombre la fitness du chemin courant
-    \item Passer au chemin suivant
-  \end{enumerate}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Population}
-  \framesubtitle{Sélection: Complexité}
-  Recalculer la longueur de tous les chemins \\
-  En faire la somme \\ \pause{}
+  \framesubtitle{Évaluation: Complexité}
+  Recalculer la longueur de tous les chemins \\ \pause{}
   \textbf{Utiliser un cache}
 \end{frame}
 
 \begin{frame}[fragile]
   \frametitle{Population}
-  \framesubtitle{Sélection: Cache}
+  \framesubtitle{Évaluation: Cache}
   \[
     [\text{Chemin}] \Rightarrow \text{fitness} \pause{}
   \]
   \[
-   \textbf{Si } \text{chemin} \in \text{clés} \text{ récupérer } \textbf{sinon} \text{ calculer}
+   \textbf{Si } \text{chemin} \in \text{clés} \text{ récupérer } \textbf{sinon} \text{ calculer et mettre en cache.}
   \]
 \end{frame}
 
@@ -318,7 +248,7 @@ Distance par rapport à une autre ville
   \centering
   Mesure à quel point les chemins sont devenus meilleurs sur $n$ générations \pause{}
   \[
-    \frac{\text{Meilleure fitness}_1}{\text{Meilleure fitness}_n} \times 100
+    \frac{\text{Meilleure fitness}_n - \text{Meilleure fitness}_1}{\text{Meilleure fitness}_1} \times 100
   \]
 \end{frame}
 
@@ -344,8 +274,8 @@ Distance par rapport à une autre ville
 \begin{frame}
   \frametitle{Conclusion}
   \pause{}
-  Découverte des algorithmes génétique, pratique POO en Python \pause{} \\
-  Difficultés: Crossover, et roulette, tests.
+  Introduction aux algorithmes génétiques, pratique POO en Python \pause{} \\
+  Difficultés: Roulette, tests.
 \end{frame}
 
 \end{document}
